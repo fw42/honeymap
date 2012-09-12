@@ -24,3 +24,9 @@ $('#world-map').vectorMap({
 		$("#log").scrollTop($("#log")[0].scrollHeight);
         }
 });
+
+/*
+var x;
+x = $('#world-map').vectorMap('get', 'mapObject').latLngToPoint(41.90, 12.45);
+$('#log').append(x.x + ", " + x.y);
+*/
