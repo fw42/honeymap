@@ -1,0 +1,20 @@
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #021320;
+  color: white;
+}
+
+#world-map {
+  margin: 0px auto 0px auto;
+}
+
+#log {
+  margin: 0px auto 0px auto;
+  overflow: auto;
+  background-color: #042945;
+  color: white;
+  border: 2px solid white;
+  padding: 2px;
+  font-family: Fixed, monospace;
+}
