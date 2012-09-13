@@ -18,3 +18,40 @@ body {
   padding: 2px;
   font-family: Fixed, monospace;
 }
+
+.marker {
+  position: absolute;
+
+  /* 40px radius, move origin to center */
+  height: 80px;
+  width: 80px;
+  margin-top: -40px;
+  margin-left: -40px;
+
+  opacity: 0;
+  -webkit-animation: marker_popup 1s;
+  -webkit-transform: scale3d(0, 0, 0);
+  border-radius: 100px;
+  -webkit-border-radius: 100px;
+  background-color: #074675;
+}
+
+@-webkit-keyframes marker_popup {
+
+  0% {
+    opacity: 1;
+    display: block;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: scale3d(1, 1, 0);
+    -webkit-box-shadow: rgba(0, 0, 0, 0) 10px 10px 0;
+    display: none;
+  }
+
+}
