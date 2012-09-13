@@ -3,6 +3,7 @@ body {
   padding: 0px;
   background-color: #021320;
   color: white;
+  background: -webkit-linear-gradient(top, #021320, #03244b, #021320);
 }
 
 #world-map {
@@ -12,9 +13,9 @@ body {
 #log {
   margin: 0px auto 0px auto;
   overflow: auto;
-  background-color: #042945;
+  background-color: black;
   color: white;
-  border: 2px solid white;
+  border: 1px solid white;
   padding: 2px;
   font-family: Fixed, monospace;
 }
