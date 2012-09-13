@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>jVectorMap demo</title>
+  <title>World Map</title>
   <link rel="stylesheet" href="extern/jquery-jvectormap-1.0.css" type="text/css" media="screen"/>
   <script src="extern/jquery-1.8.1.min.js"></script>
   <script src="extern/jquery-jvectormap-1.0.min.js"></script>
@@ -15,9 +15,35 @@
   <div id="log"></div>
   <script src="main.js"></script>
   <script type="text/javascript">
-    $("body").click(function(ev) {
-      add_marker(ev.pageX, ev.pageY);
+
+    // Create markers at random
+    function random_point() {
+      var lat, lng;
+      do {
+        lat = Math.random() * 180 - 90;
+        lng = Math.random() * 360 - 180;
+      } while(get_regionname_ll(lat,lng) == null);
+
+      marker_animation_ll(lat, lng);
+      add_log("New attack in " + get_regionname_ll(lat,lng) + " (" + lat.toFixed(2) + ", " + lng.toFixed(2) + ")<br/>");
+      $("#world-map").vectorMap("get", "mapObject").addMarker(lat+","+lng, { latLng: [ lat, lng ], name: "("+lat+","+lng+")" }, [])
+    }
+    function timer() {
+      window.setTimeout(random_point, Math.random() * 1000);
+    }
+    window.setInterval(timer, 500);
+
+    // Create markers when clicking
+    $("#world-map").click(function(ev) {
+      var x = ev.pageX, y = ev.pageY;
+      x -= $("#world-map").offset().left;
+      y -= $("#world-map").offset().top;
+      if(get_regionname(x, y) != null) {
+        marker_animation(x,y);
+        add_log("New attack in " + get_regionname(x, y) + " (" + x + ", " + y + ")<br/>");
+      }
     });
+
   </script>
 </body>
 

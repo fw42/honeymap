@@ -9,25 +9,28 @@ function set_log_size() {
 	$('#log').height(0.15 * $(document).height());
 }
 
-function add_marker(x, y) {
-
-  // Remove existing markers, which are not visible any more
-  $(".marker").each(function(i) {
+function marker_animation(x, y) {
+  $(".marker_animation").each(function(i) {
     if($(this).css("opacity") == 0) {
       $(this).remove();
     }
   });
-
-  // Add new marker
-  $("body").append($('<div class="marker"></div>').css('left', x + 'px').css('top', y + 'px'));
-
+  $("#world-map").append($('<div class="marker_animation"></div>').css('left', x + 'px').css('top', y + 'px'));
 }
 
-function add_marker_ll(lat, lng) {
-  var xy;
-  xy = $('#world-map').vectorMap('get', 'mapObject').latLngToPoint(lat, lng);
-  add_marker(xy.x, xy.y);
-  add_log("DEBUG: " + xy.x + ", " + xy.y + "<br/>");
+function marker_animation_ll(lat, lng) {
+  var xy = $('#world-map').vectorMap('get', 'mapObject').latLngToPoint(lat, lng);
+  marker_animation(xy.x, xy.y);
+}
+
+function get_regionname(x, y) {
+  var efp = $(document.elementFromPoint(x + $("#world-map").offset().left, y + $("#world-map").offset().top));
+  return efp.is('path') ? $("#world-map").vectorMap("get", "mapObject").getRegionName(efp.attr('data-code')) : null;
+}
+
+function get_regionname_ll(lat, lng) {
+  var xy = $('#world-map').vectorMap('get', 'mapObject').latLngToPoint(lat, lng);
+  return get_regionname(xy.x, xy.y);
 }
 
 function add_log(msg) {
@@ -45,7 +48,4 @@ set_log_size();
 
 $('#world-map').vectorMap({
   backgroundColor: '#021320',
-  onRegionClick: function(e, c) {
-    add_log($('#world-map').vectorMap('get', 'mapObject').getRegionName(c) + "<br/>");   
-  }
 });

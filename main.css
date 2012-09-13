@@ -19,7 +19,7 @@ body {
   font-family: Fixed, monospace;
 }
 
-.marker {
+.marker_animation {
   position: absolute;
 
   /* 40px radius, move origin to center */
