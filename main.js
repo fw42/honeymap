@@ -42,10 +42,3 @@ $(window).resize(function(){
   set_map_size();
   set_log_size();
 });
-
-set_map_size();
-set_log_size();
-
-$('#world-map').vectorMap({
-  backgroundColor: '#021320',
-});

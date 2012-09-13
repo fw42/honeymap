@@ -33,7 +33,7 @@ body {
   -webkit-transform: scale3d(0, 0, 0);
   border-radius: 100px;
   -webkit-border-radius: 100px;
-  background-color: #074675;
+  background-color: red; /* #074675; */;
 }
 
 @-webkit-keyframes marker_popup {

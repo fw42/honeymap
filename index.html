@@ -13,37 +13,26 @@
 <body>
   <div id="world-map"></div>
   <div id="log"></div>
+
   <script src="main.js"></script>
+  <script src="feed.js"></script>
+
   <script type="text/javascript">
+    // Set size for map and log
+    set_map_size();
+    set_log_size();
 
-    // Create markers at random
-    function random_point() {
-      var lat, lng;
-      do {
-        lat = Math.random() * 180 - 90;
-        lng = Math.random() * 360 - 180;
-      } while(get_regionname_ll(lat,lng) == null);
-
-      marker_animation_ll(lat, lng);
-      add_log("New attack in " + get_regionname_ll(lat,lng) + " (" + lat.toFixed(2) + ", " + lng.toFixed(2) + ")<br/>");
-      $("#world-map").vectorMap("get", "mapObject").addMarker(lat+","+lng, { latLng: [ lat, lng ], name: "("+lat+","+lng+")" }, [])
-    }
-    function timer() {
-      window.setTimeout(random_point, Math.random() * 1000);
-    }
-    window.setInterval(timer, 500);
-
-    // Create markers when clicking
-    $("#world-map").click(function(ev) {
-      var x = ev.pageX, y = ev.pageY;
-      x -= $("#world-map").offset().left;
-      y -= $("#world-map").offset().top;
-      if(get_regionname(x, y) != null) {
-        marker_animation(x,y);
-        add_log("New attack in " + get_regionname(x, y) + " (" + x + ", " + y + ")<br/>");
+    // Load map
+    $('#world-map').vectorMap({
+      backgroundColor: '#021320',
+      markerStyle: {
+        initial: {
+          fill: 'red',
+          stroke: 'darkred',
+          r: 3
+        }
       }
     });
-
   </script>
 </body>
 
