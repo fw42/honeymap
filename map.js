@@ -14,6 +14,12 @@ $('#world-map').vectorMap({
       normalizeFunction: 'linear',
       values: regionhits
     }]
+  },
+  onRegionLabelShow: function(ev, label, code) {
+    label.html(
+      "<b>" + label.html() + "</b><br/>" +
+      (regionhits[code] ? regionhits[code] : 0) + " events"
+    );
   }
 });
 var mapobj = $('#world-map').vectorMap('get', 'mapObject');
