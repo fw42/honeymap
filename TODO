@@ -1,0 +1,5 @@
+* Enlarge markers if the same event (IP) occurs multiple times
+* Bug: counting fails if elementFromPoint() hits an existing marker
+  instead the underlying region
+* Option to activate removal of old markers
+* Browser compatibility
