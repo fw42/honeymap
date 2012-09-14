@@ -8,7 +8,7 @@ function marker_animation(x, y) {
       $(this).remove();
     }
   });
-  $("#world-map").append($('<div class="marker_animation"></div>').css('left', x + 'px').css('top', y + 'px'));
+  $("#world-map").append($('<div class="marker_animation red"></div>').css('left', x + 'px').css('top', y + 'px'));
 }
 
 function marker_animation_ll(lat, lng) {
