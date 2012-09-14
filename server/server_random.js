@@ -1,13 +1,16 @@
+/** Example node.js app for serving random markers via socket.io **/
+
 var app = require('http').createServer(handler);
 var fs = require('fs');
 var util = require('util');
 var ns = require('node-static');
 var io = require('socket.io').listen(app);
-
 var file = new(ns.Server)("../static/", { cache: 600 });
 
+// Listen on port 1337
 app.listen(1337);
 
+// Serve static content
 function handler (req, res) {
   req.addListener('end', function() {
     file.serve(req, res, function(err, result) {
@@ -24,6 +27,7 @@ function handler (req, res) {
   });
 }
 
+// Push random markers via socket.io
 io.sockets.on('connection', function (socket) {
   function random_point() {
     var lat, lng;
