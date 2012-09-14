@@ -1,13 +1,4 @@
-function set_map_size() {
-	$('#world-map').width(0.95 * $(document).width());
-	$('#world-map').height(0.8 * $(document).height());
-}
-
-function set_log_size() {
-	$('#log').width(0.75 * $(document).width());
-	$('#log').css("margin-top", 0.03 * $(document).height());
-	$('#log').height(0.15 * $(document).height());
-}
+var regionhits = {};
 
 function marker_animation(x, y) {
   $(".marker_animation").each(function(i) {
@@ -19,18 +10,24 @@ function marker_animation(x, y) {
 }
 
 function marker_animation_ll(lat, lng) {
-  var xy = $('#world-map').vectorMap('get', 'mapObject').latLngToPoint(lat, lng);
+  var xy = mapobj.latLngToPoint(lat, lng);
   marker_animation(xy.x, xy.y);
 }
 
-function get_regionname(x, y) {
+function get_regioncode(x, y) {
+  // HACKHACKHACK
   var efp = $(document.elementFromPoint(x + $("#world-map").offset().left, y + $("#world-map").offset().top));
-  return efp.is('path') ? $("#world-map").vectorMap("get", "mapObject").getRegionName(efp.attr('data-code')) : null;
+  return efp.is('path') ? efp.attr('data-code') : null;
+}
+
+function get_regioncode_ll(lat, lng) {
+  var xy = mapobj.latLngToPoint(lat, lng);
+  return get_regioncode(xy.x, xy.y);
 }
 
 function get_regionname_ll(lat, lng) {
-  var xy = $('#world-map').vectorMap('get', 'mapObject').latLngToPoint(lat, lng);
-  return get_regionname(xy.x, xy.y);
+  var code = get_regioncode_ll(lat,lng);
+  return code ? mapobj.getRegionName(code) : null;
 }
 
 function add_log(msg) {
@@ -38,7 +35,17 @@ function add_log(msg) {
   $("#log").scrollTop($("#log")[0].scrollHeight);
 }
 
-$(window).resize(function(){
-  set_map_size();
-  set_log_size();
-});
+function add_marker_ll(lat, lng) {
+  var region = get_regioncode_ll(lat, lng);
+  regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
+  marker_animation_ll(lat, lng);
+  mapobj.addMarker(lat+","+lng, { latLng: [ lat, lng ], name: "("+lat+", "+lng+")" }, [])
+}
+
+function update_regioncolors() {
+  // Force recomputation of min and max for correct color scaling
+  mapobj.series.regions[0].params.min = null;
+  mapobj.series.regions[0].params.max = null;
+  // Update data
+  mapobj.series.regions[0].setValues(regionhits);
+}
