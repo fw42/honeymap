@@ -1,4 +1,6 @@
 var regionhits = {};
+var markers_visible_max = 50;
+var markers_total = 0;
 
 function marker_animation(x, y) {
   $(".marker_animation").each(function(i) {
@@ -40,8 +42,14 @@ function add_marker_ll(lat, lng) {
   if(region) {
     regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
   }
+  if(markers_total >= markers_visible_max) {
+    mapobj.removeMarkers( [
+      $($("#world-map svg g circle.jvectormap-marker")[0]).attr('data-index')
+    ]);
+  }
   marker_animation_ll(lat, lng);
   mapobj.addMarker(lat+","+lng, { latLng: [ lat, lng ], name: "("+lat+", "+lng+")" }, [])
+  markers_total++;
 }
 
 function update_regioncolors() {
