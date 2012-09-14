@@ -1,6 +1,10 @@
-* Limit maximal number of markers
-* Enlarge markers if the same event (IP) occurs multiple times
-* Bug: counting fails if elementFromPoint() hits an existing marker
-  instead the underlying region
-* Option to activate removal of old markers
+* Counter for total number of events
+* Destination markers (yellow?) with arrows
+* Limit maximal number of (source) markers
+* Counter for number of hits for (destination and source) markers in hover tooltip
+* Enlarge markers if the same event (IP) occurs multiple times,
+  dont add the same marker again
+
+* Bug: counting fails if elementFromPoint() hits an existing marker instead the underlying region
+
 * Browser compatibility
