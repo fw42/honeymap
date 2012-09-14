@@ -37,7 +37,9 @@ function add_log(msg) {
 
 function add_marker_ll(lat, lng) {
   var region = get_regioncode_ll(lat, lng);
-  regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
+  if(region) {
+    regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
+  }
   marker_animation_ll(lat, lng);
   mapobj.addMarker(lat+","+lng, { latLng: [ lat, lng ], name: "("+lat+", "+lng+")" }, [])
 }

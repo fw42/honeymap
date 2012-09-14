@@ -1,3 +1,4 @@
+* Limit maximal number of markers
 * Enlarge markers if the same event (IP) occurs multiple times
 * Bug: counting fails if elementFromPoint() hits an existing marker
   instead the underlying region
