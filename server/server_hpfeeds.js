@@ -5,10 +5,18 @@ var fs = require('fs');
 var util = require('util');
 var ns = require('node-static');
 var io = require('socket.io').listen(app);
+var hpfeeds = require('hpfeeds');
 var file = new(ns.Server)("../static/", { cache: 600 });
 
 // Listen on port 1337
 app.listen(1337);
+var feedconn = new hpfeeds.HPC('hpfeeds.honeycloud.net', 10000, 'MyUsername', 'MyPassword');
+feedconn.onready(function() {
+  feedconn.subscribe('geoloc.events');
+});
+feedconn.msgcb = function() {
+  console.log('msgcb', arguments);
+}
 
 // Serve static content
 function handler (req, res) {
