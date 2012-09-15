@@ -3,6 +3,8 @@ body {
   padding: 0px;
   background-color: #021320;
   color: white;
+
+  background: -moz-linear-gradient(top, #021320, #03244b, #021320);
   background: -webkit-linear-gradient(top, #021320, #03244b, #021320);
 }
 
@@ -30,11 +32,22 @@ body {
   margin-left: -40px;
 
   opacity: 0;
+
+  animation: marker_popup 1s;
   -webkit-animation: marker_popup 1s;
+  -moz-animation: marker_popup 1s;
+
+  transform: scale3d(0, 0, 0);
   -webkit-transform: scale3d(0, 0, 0);
+  -moz-transform: scale3d(0, 0, 0);
+
   border-radius: 100px;
-  -webkit-border-radius: 100px;
-  background-color: red; /* #074675; */;
+  -moz-border-radius: 100px;
+
+}
+
+.red {
+  background-color: red;
 }
 
 @-webkit-keyframes marker_popup {
@@ -52,6 +65,26 @@ body {
     opacity: 0;
     -webkit-transform: scale3d(1, 1, 0);
     -webkit-box-shadow: rgba(0, 0, 0, 0) 10px 10px 0;
+    display: none;
+  }
+
+}
+
+@-moz-keyframes marker_popup {
+
+  0% {
+    opacity: 1;
+    display: block;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    -moz-transform: scale3d(1, 1, 0);
+    -moz-box-shadow: rgba(0, 0, 0, 0) 10px 10px 0;
     display: none;
   }
 
