@@ -12,7 +12,12 @@ socket.on('marker', function(data) {
   }
 
   if(get_regionname_ll(lat1, lng1) != null) {
-    add_log("New event in " + get_regionname_ll(lat1, lng1) + " (" + lat1.toFixed(2) + ", " + lng1.toFixed(2) + ")<br/>");
+    add_log(
+      "New attack in " + get_regionname_ll(lat1, lng1) +
+      " <small>(" + lat1.toFixed(2) + ", " + lng1.toFixed(2) + ")</small>" +
+     (data.type ? (" [" + data.type + "]") : "") +
+     "<br/>"
+    );
   }
 
   if(p1.x == 0 && p1.y == 0) { return; }

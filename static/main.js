@@ -28,7 +28,7 @@ function get_regioncode(x, y) {
   var efp = $(document.elementFromPoint(x + $("#world-map").offset().left, y + $("#world-map").offset().top));
   if(efp.is('path')) {
     return efp.attr('data-code');
-  } else if(efp.is('circle')) {
+  } else if(efp.is('circle') || (efp.is('div') && efp.hasClass('marker_animation'))) {
     // This is as ugly as it gets. If we hit an existing marker, make it invisible,
     // look again and then make it visible again.
     efp.hide();
@@ -57,7 +57,7 @@ function add_log(msg) {
 
 function remove_oldest_marker() {
     toremove = $($("#world-map svg g circle.jvectormap-marker")[0]);
-    par = $(toremove.parent().get(0));
+    par = toremove.parent();
     mapobj.removeMarkers( [ toremove.attr('data-index') ]);
     console.log(par);
     par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
@@ -67,25 +67,30 @@ function add_marker_ll(lat, lng, type) {
   if(type == null) {
     type == 'src';
   } else if(type == 'src') {
-    // only count destination markers which are within a valid region
+    // only count src markers which are within a valid region
     var region = get_regioncode_ll(lat, lng);
     if(region) {
       regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
     }
   }
-  if(markers_total++ >= markers_visible_max) {
-    remove_oldest_marker();
-  }
+  var markerkey = lat+","+lng;
   marker_animation_ll(lat, lng, type == 'dst' ? 'markerdst' : 'markersrc');
-  if(type == 'dst') {
-    mapobj.addMarker(lat+","+lng, {
-     latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")",
-     style: { fill: '#F8E23B', stroke: '#383f47' }
-    }, []);
-  } else {
-    mapobj.addMarker(lat+","+lng, {
-     latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")"
-    }, []);
+  // only add markers which do not exist yet
+  if(mapobj.markers[markerkey] == null) {
+    if(markers_total >= markers_visible_max) {
+      remove_oldest_marker();
+    }
+    if(type == 'dst') {
+      mapobj.addMarker(markerkey, {
+       latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")",
+       style: { fill: '#F8E23B', stroke: '#383f47' }
+      }, []);
+    } else {
+      mapobj.addMarker(markerkey, {
+       latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")"
+      }, []);
+    }
+    markers_total++;
   }
 }
 
