@@ -8,14 +8,14 @@ GPS locations on a SVG world map. It makes use of
 [jVectorMap](http://jvectormap.com/) and HTML5/CSS3 animations.
 
 In principle, it can be used with any stream of GPS data. For our application,
-we use honeypot captures, provided by [hpfeeds](https://github.com/rep/hpfeeds)
+we use honeypot captures, provided by several [hpfeeds](https://github.com/rep/hpfeeds)
 from the [Honeynet Project](http://www.honeynet.org/).
 
-Tested with node v0.8.9 and socket.io v0.9.10.
+Tested with node.js v0.8.9 and socket.io v0.9.10.
 
 Example
 -------
-http://...
+[http://81.166.122.239/](http://81.166.122.239/)
 
 TODO
 ----

@@ -6,9 +6,19 @@ var io = require('socket.io').listen(app);
 var hpfeeds = require('hpfeeds');
 var file = new(ns.Server)("../static/", { cache: 600 });
 
-// Listen on port 1337
-app.listen(1337);
-var feedconn = new hpfeeds.HPC('hpfeeds.honeycloud.net', 10000, 'MyUsername', 'MyPassword');
+eval(fs.readFileSync('server_hpfeeds_config.js').toString());
+
+// Listen and drop privileges
+app.listen(config.port);
+process.setuid(config.uid);
+
+// hp feed
+var feedconn = new hpfeeds.HPC(
+  config.hpfeeds.server,
+  config.hpfeeds.port,
+  config.hpfeeds.ident,
+  config.hpfeeds.auth
+);
 feedconn.onready(function() { feedconn.subscribe('geoloc.events'); });
 
 // Serve static content
