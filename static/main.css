@@ -98,3 +98,15 @@ a {
   }
 
 }
+
+#logo1 {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
+
+#logo2 {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
