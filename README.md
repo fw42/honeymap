@@ -17,6 +17,11 @@ Example
 -------
 [http://81.166.122.239/](http://81.166.122.239/)
 
+License
+-------
+GNU Lesser General Public License (LGPL), see
+[LICENSE](http://github.com/fw42/honeymap/blob/master/LICENSE).
+
 TODO
 ----
 * Browser compatibility (only webkit atm)
