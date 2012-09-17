@@ -14,9 +14,6 @@ var feedconn = new hpfeeds.HPC('hpfeeds.honeycloud.net', 10000, 'MyUsername', 'M
 feedconn.onready(function() {
   feedconn.subscribe('geoloc.events');
 });
-feedconn.msgcb = function() {
-  console.log('msgcb', arguments);
-}
 
 // Serve static content
 function handler (req, res) {
@@ -37,11 +34,22 @@ function handler (req, res) {
 
 // Push random markers via socket.io
 io.sockets.on('connection', function (socket) {
-  function random_point() {
-    var lat, lng;
-    lat = Math.random() * 180 - 90;
-    lng = Math.random() * 360 - 180;
-    socket.emit('marker', { lat: lat, lng: lng });
+  feedconn.msgcb = function(id, chan, data) {
+    console.log('msgcb', arguments);
+
+    socket.emit('marker', { latitude: data.latitude, longitude: data.longitude, latitude2: data.latitude2, longitude2: data.longitude2 });
+
   }
-  setInterval(function() { setTimeout(random_point, Math.random() * 1000) }, 500);
+
+/*
+  function random_point() {
+    var lat1, lng1, lat2, lng2;
+    lat1 = Math.random() * 180 - 90;
+    lng1 = Math.random() * 360 - 180;
+    lat2 = Math.random() * 180 - 90;
+    lng2 = Math.random() * 360 - 180;
+    socket.emit('marker', { latitude: lat1, longitude: lng1, latitude2: lat2, longitude2: lng2 });
+  }
+  setInterval(function() { setTimeout(random_point, Math.random() * 1000 + 250) }, 500);
+*/
 });

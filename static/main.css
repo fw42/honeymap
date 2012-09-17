@@ -46,7 +46,11 @@ body {
 
 }
 
-.red {
+.markerdst {
+  background-color: yellow;
+}
+
+.markersrc {
   background-color: red;
 }
 

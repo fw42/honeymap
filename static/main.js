@@ -1,25 +1,43 @@
 var regionhits = {};
-var markers_visible_max = 50;
+var markers_visible_max = 5;
 var markers_total = 0;
 
-function marker_animation(x, y) {
+function remove_finished_animations() {
   $(".marker_animation").each(function(i) {
     if($(this).css("opacity") == 0) {
       $(this).remove();
     }
   });
-  $("#world-map").append($('<div class="marker_animation red"></div>').css('left', x + 'px').css('top', y + 'px'));
 }
 
-function marker_animation_ll(lat, lng) {
+function marker_animation(x, y, css) {
+  remove_finished_animations();
+  $("#world-map")
+    .append($('<div class="marker_animation ' + css + '"></div>')
+    .css('left', x + 'px')
+    .css('top', y + 'px'));
+}
+
+function marker_animation_ll(lat, lng, css) {
   var xy = mapobj.latLngToPoint(lat, lng);
-  marker_animation(xy.x, xy.y);
+  marker_animation(xy.x, xy.y, css);
 }
 
 function get_regioncode(x, y) {
   // HACKHACKHACK
   var efp = $(document.elementFromPoint(x + $("#world-map").offset().left, y + $("#world-map").offset().top));
-  return efp.is('path') ? efp.attr('data-code') : null;
+  if(efp.is('path')) {
+    return efp.attr('data-code');
+  } else if(efp.is('circle')) {
+    // This is as ugly as it gets. If we hit an existing marker, make it invisible,
+    // look again and then make it visible again.
+    efp.hide();
+    var rc = get_regioncode(x, y);
+    efp.show();
+    return rc;
+  } else {
+    return null;
+  }
 }
 
 function get_regioncode_ll(lat, lng) {
@@ -37,19 +55,48 @@ function add_log(msg) {
   $("#log").scrollTop($("#log")[0].scrollHeight);
 }
 
-function add_marker_ll(lat, lng) {
-  var region = get_regioncode_ll(lat, lng);
-  if(region) {
-    regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
+function remove_oldest_marker() {
+    toremove = $($("#world-map svg g circle.jvectormap-marker")[0]);
+    par = $(toremove.parent().get(0));
+    mapobj.removeMarkers( [ toremove.attr('data-index') ]);
+    console.log(par);
+    par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
+}
+
+function add_marker_ll(lat, lng, type) {
+  if(type == null) {
+    type == 'src';
+  } else if(type == 'src') {
+    // only count destination markers which are within a valid region
+    var region = get_regioncode_ll(lat, lng);
+    if(region) {
+      regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
+    }
   }
-  if(markers_total >= markers_visible_max) {
-    mapobj.removeMarkers( [
-      $($("#world-map svg g circle.jvectormap-marker")[0]).attr('data-index')
-    ]);
+  if(markers_total++ >= markers_visible_max) {
+    remove_oldest_marker();
   }
-  marker_animation_ll(lat, lng);
-  mapobj.addMarker(lat+","+lng, { latLng: [ lat, lng ], name: "("+lat+", "+lng+")" }, [])
-  markers_total++;
+  marker_animation_ll(lat, lng, type == 'dst' ? 'markerdst' : 'markersrc');
+  if(type == 'dst') {
+    mapobj.addMarker(lat+","+lng, {
+     latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")",
+     style: { fill: '#F8E23B', stroke: '#383f47' }
+    }, []);
+  } else {
+    mapobj.addMarker(lat+","+lng, {
+     latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")"
+    }, []);
+  }
+}
+
+function draw_line(x1, y1, x2, y2) {
+  svg.append('<g><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke-width="2" /></g>');
+}
+
+function draw_line_ll(lat1, lng1, lat2, lng2) {
+  var p1 = mapobj.latLngToPoint(lat1, lng1);
+  var p2 = mapobj.latLngToPoint(lat2, lng2);
+  draw_line(p1.x, p1.y, p2.x, p2.y);
 }
 
 function update_regioncolors() {

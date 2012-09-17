@@ -23,3 +23,4 @@ $('#world-map').vectorMap({
   }
 });
 var mapobj = $('#world-map').vectorMap('get', 'mapObject');
+var svg = $('svg');
