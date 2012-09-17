@@ -15,7 +15,7 @@ Tested with node.js v0.8.9 and socket.io v0.9.10.
 
 Example
 -------
-[http://81.166.122.239/](http://81.166.122.239/)
+[http://map.honeycloud.net/](http://map.honeycloud.net/)
 
 License
 -------
