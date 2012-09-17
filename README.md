@@ -22,6 +22,11 @@ License
 GNU Lesser General Public License (LGPL), see
 [LICENSE](http://github.com/fw42/honeymap/blob/master/LICENSE).
 
+Authors
+-------
+* [Florian Weingarten](mailto:flo@hackvalue.de) ([fw42](http://github.com/fw42/))
+* [Mark Schloesser](mailto:mark.schloesser@rwth-aachen.de) ([rep](http://github.com/rep/))
+
 TODO
 ----
 * Browser compatibility (only webkit atm)
