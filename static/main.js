@@ -1,5 +1,5 @@
 var regionhits = {};
-var markers_visible_max = 5;
+var markers_visible_max = 50;
 var markers_total = 0;
 
 function remove_finished_animations() {

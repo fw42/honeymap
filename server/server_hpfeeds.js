@@ -33,6 +33,6 @@ feedconn.msgcb = function(id, chan, data) {
   io.sockets.emit('marker', {
     latitude: data.latitude, longitude: data.longitude,
     latitude2: data.latitude2, longitude2: data.longitude2,
-    type: data.type
+    type: data.type, md5: data.md5
   });
 }

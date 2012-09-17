@@ -12,12 +12,24 @@ socket.on('marker', function(data) {
   }
 
   if(get_regionname_ll(lat1, lng1) != null) {
-    add_log(
-      "New attack in " + get_regionname_ll(lat1, lng1) +
-      " <small>(" + lat1.toFixed(2) + ", " + lng1.toFixed(2) + ")</small>" +
-     (data.type ? (" [" + data.type + "]") : "") +
-     "<br/>"
-    );
+    var logstr;
+    logstr = "New attack in " + get_regionname_ll(lat1, lng1) +
+      " <small>(" + lat1.toFixed(2) + ", " + lng1.toFixed(2) + ")</small>";
+    if(data.type || data.md5) {
+      logstr += " [";
+      if(data.type) {
+        logstr += "type: " + data.type;
+      }
+      if(data.md5) {
+        if(data.type) {
+          logstr += ", ";
+        }
+        logstr += 'md5: <a href="http://www.virustotal.com/search/?query=' + data.md5 + '">' + data.md5 + '</a>';
+      }
+      logstr += "]";
+    }
+    logstr += "<br/>";
+    add_log(logstr);
   }
 
   if(p1.x == 0 && p1.y == 0) { return; }

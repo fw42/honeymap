@@ -4,7 +4,7 @@ function set_map_size() {
 }
 
 function set_log_size() {
-  $('#log').width(0.75 * $(document).width());
+  $('#log').width(0.5 * $(document).width());
   $('#log').css("margin-top", 0.03 * $(document).height());
   $('#log').height(0.15 * $(document).height());
 }

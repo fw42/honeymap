@@ -8,6 +8,10 @@ body {
   background: -webkit-linear-gradient(top, #021320, #03244b, #021320);
 }
 
+a {
+  color: white;
+}
+
 #world-map {
   margin: 0px auto 0px auto;
 }
@@ -18,8 +22,9 @@ body {
   background-color: black;
   color: white;
   border: 1px solid white;
-  padding: 2px;
-  font-family: Fixed, monospace;
+  padding: 5px;
+  font-family: "Andale Mono", "Courier", monospace, Fixed;
+  font-size: 80%;
 }
 
 .marker_animation {
