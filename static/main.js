@@ -1,4 +1,5 @@
 var regionhits = {};
+var markerhits = {};
 var markers_visible_max = 50;
 var markers_total = 0;
 
@@ -74,6 +75,7 @@ function add_marker_ll(lat, lng, type) {
     }
   }
   var markerkey = lat+","+lng;
+  markerhits[markerkey] = markerhits[markerkey] ? (markerhits[markerkey] + 1) : 1;
   marker_animation_ll(lat, lng, type == 'dst' ? 'markerdst' : 'markersrc');
   // only add markers which do not exist yet
   if(mapobj.markers[markerkey] == null) {

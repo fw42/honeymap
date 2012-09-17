@@ -20,6 +20,12 @@ $('#world-map').vectorMap({
       "<b>" + label.html() + "</b><br/>" +
       (regionhits[code] ? regionhits[code] : 0) + " events"
     );
+  },
+  onMarkerLabelShow: function(ev, label, code) {
+    label.html(
+      "<b>" + label.html() + "</b><br/>" +
+      markerhits[code] + " events"
+    );
   }
 });
 var mapobj = $('#world-map').vectorMap('get', 'mapObject');
