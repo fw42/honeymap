@@ -4,12 +4,12 @@ socket.on('marker', function(data) {
   var lat1 = data.latitude,  lng1 = data.longitude,
       lat2 = data.latitude2, lng2 = data.longitude2;
 
-  var p1 = mapobj.latLngToPoint(lat1,lng1);
-  var p2 = mapobj.latLngToPoint(lat2,lng2);
-
   if(lat1 == null || lng1 == null) {
     return;
   }
+
+  var p1 = mapobj.latLngToPoint(lat1,lng1);
+  if(p1.x == 0 && p1.y == 0) { return; }
 
   if(get_regionname_ll(lat1, lng1) != null) {
     var logstr;
@@ -29,11 +29,11 @@ socket.on('marker', function(data) {
     add_log(logstr + "<br/>");
   }
 
-  if(p1.x == 0 && p1.y == 0) { return; }
   add_marker_ll(lat1, lng1, 'src', data.type);
   update_regioncolors();
 
   if(lat2 == null || lng2 == null) { return; }
+  var p2 = mapobj.latLngToPoint(lat2,lng2);
   if(p2.x == 0 || p2.y == 0) { return; }
   add_marker_ll(lat2, lng2, 'dst');
 });
