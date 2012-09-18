@@ -38,7 +38,7 @@ socket.on('marker', function(data) {
     logstr += new Date().toTimeString().substring(0,8);
     logstr += "</div>";
     logstr += ' <div class="log_bracket">&lt;</div>' + data.type + '<div class="log_bracket">&gt;</div> ';
-    logstr += 'New ' + (data.type == "thug" ? "scan" : "attack") + ' from ' + 
+    logstr += 'New ' + (data.type == "thug.events" ? "scan" : "attack") + ' from ' + 
       '<div class="log_country">' + (data.city ? (data.city + ", ") : "") + region1 + '</div>' + 
       ' <small>(' + lat1.toFixed(2) + "," + lng1.toFixed(2) + ")</small>";
 
