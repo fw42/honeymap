@@ -37,5 +37,6 @@ Authors
 TODO
 ----
 * Marker hovers dont work when animation is in progress
+* Make maximal number of visible markers configurable by user
 * "Replay" feature (load last x hours from server)
 * Browser compatibility (only Webkit and Firefox right now)

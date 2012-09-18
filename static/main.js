@@ -2,7 +2,7 @@ var regionhits = {};
 var regionhits_countonly = {};
 var markerhits = {};
 var markercaptions = {};
-var markers_visible_max = 100;
+var markers_visible_max = 150;
 var markers_total = 0;
 
 function marker_animation(x, y, css) {
@@ -56,7 +56,6 @@ function remove_oldest_marker() {
     toremove = $($("#world-map svg g circle.jvectormap-marker")[0]);
     par = toremove.parent();
     mapobj.removeMarkers( [ toremove.attr('data-index') ]);
-    console.log(par);
     par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
 }
 
