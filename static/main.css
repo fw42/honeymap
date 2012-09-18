@@ -45,7 +45,24 @@ a {
   max-width: 20%;
 }
 
+#helpbtn {
+  position: absolute;
+  left: 1px;
+  top: 1px;
+}
 
+#helpbtn img {
+  border: 0;
+}
+
+.modal {
+  color: black;
+  font-family: "Trebuchet MS", sans-serif;
+}
+
+.modal a {
+  color: blue;
+}
 
 /*************************** ANIMATION STUFF ************************************/
 

@@ -1,5 +1,5 @@
 function set_map_size() {
-  $('#world-map').width(0.95 * $(document).width());
+  $('#world-map').width($(document).width() - 100);
   $('#world-map').height(0.8 * $(document).height());
 }
 

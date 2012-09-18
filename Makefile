@@ -7,7 +7,7 @@ hm.js: all.js
 	rm all.js
 
 all.js:
-	cat static/extern/jquery-*.js static/main.js static/layout.js static/feed_socketio_hpfeeds.js static/map.js > all.js
+	cat static/extern/jquery-*.js static/main.js static/layout.js static/extern/bootstrap.js static/feed_socketio_hpfeeds.js static/map.js > all.js
 
 clean:
 	rm -f static/hm.js

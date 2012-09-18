@@ -3,7 +3,7 @@ function event_count_summary(hash) {
   var summary = "";
   var total = 0;
   for(type in hash) {
-    if(total == 0) { summary += "<br/><hr/>"; }
+    if(total == 0) { summary += "<hr/>"; }
     summary += "<b>" + type + "</b>: " + (hash[type] ? hash[type] : 0) + "<br/>";
     total += hash[type];
   }

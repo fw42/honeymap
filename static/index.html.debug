@@ -1,28 +1,70 @@
 <!DOCTYPE html>
-<!--
- ###################################
- # http://github.com/fw42/honeymap #
- ###################################
--->
-
 <html>
 
 <head>
   <title>HoneyMap</title>
   <link rel="stylesheet" href="main.css" type="text/css" media="screen"/>
   <link rel="stylesheet" href="extern/jquery-jvectormap-1.0.css" type="text/css" media="screen"/>
+  <link rel="stylesheet" href="extern/bootstrap.min.css" type="text/css" media="screen"/>
   <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
   <meta content="Florian Weingarten, Mark Schloesser" name="author" />
   <script src="extern/jquery-1.7.2.min.js"></script>
   <script src="extern/jquery-jvectormap-1.0.min.js"></script>
   <script src="extern/jquery-jvectormap-world-mill-en.js"></script>
-  <script src="extern/jquery.transit.min.js"></script>
+  <script src="extern/bootstrap.js"></script>
+  <script src="extern/jquery-transit.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
   <div id="world-map"></div>
   <div id="log"></div>
+  <div id="logo1"><a href="http://www.honeynet.org/"><img src="img/hp_logo.png"></a></div>
+  <div id="logo2"><a href="http://www.itsec.rwth-aachen.de/"><img src="img/itsec_logo.png"></a></div>
+  <div id="helpbtn"><a href="#helpmodal" data-toggle="modal"><img src="img/help.png" alt="Help" /></a></div>
+
+  <div class="modal" id="helpmodal" tabindex="-1" role="dialog" aria-labelledby="helpmodal" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+      <h3>HoneyMap</h3>
+    </div>
+    <div class="modal-body">
+      <p>
+        You are looking at the <b>HoneyMap</b>, a real-time world map which visualizes attacks
+        captured by honeypots of the <a href="http://www.honeynet.org/">Honeynet Project</a>.
+        Red markers on the map stand for attacks, yellow markers are sensors (honeypots).
+      </p>
+      <p>
+        This project is highly experimental and should be considered an ALPHA version. So far,
+        current Chromium and Firefox browser should work fine. Opera, Safari and Internet Explorer
+        probably wont work. If you identify bugs or have feature requests, please let us know.
+      </p>
+      <h4>Technology</h4>
+      <ul>
+        <li>
+          <b>Frontend:</b>
+          <a href="http://jquery.com/">jQuery</a>,
+          <a href="http://jvectormap.com/">jVectorMap</a>,
+          <a href="http://ricostacruz.com/jquery.transit/">jQuery-Transit</a>,
+          <a href="http://twitter.github.com/bootstrap/">bootstrap</a>
+        </li>
+        <li>
+          <b>Backend:</b>
+          <a href="http://nodejs.org/">node.js</a>,
+          <a href="http://socket.io/">socket.io</a>,
+          <a href="https://github.com/rep/hpfeeds">hpfeeds</a></li>
+      </ul>
+      <h4>Authors</h4>
+      <ul>
+        <li>Florian Weingarten (<a href="mailto:flo@hackvalue.de">flo@hackvalue.de</a>)</li>
+        <li>Mark Schloesser (<a href="mailto:mark.schloesser@rwth-aachen.de">mark.schloesser@rwth-aachen.de</a>)</li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+  </div>
+
   <script src="main.js"></script>
   <script src="layout.js"></script>
   <!-- <script src="feed_random.js"></script> -->
@@ -30,12 +72,11 @@
   <script src="feed_socketio_hpfeeds.js"></script>
   <script src="map.js"></script>
 
-  <div id="logo1"><a href="http://www.honeynet.org/"><img src="img/hp_logo.png"></a></div>
-  <div id="logo2"><a href="http://www.itsec.rwth-aachen.de/"><img src="img/itsec_logo.png"></a></div>
-
   <script type="text/javascript">
-  add_log("<b>Welcome to HoneyMap. This is an ALPHA version. Only works with Webkit browsers (Chrome, ...). No Firefox yet :-(</b><br/><br/>");
+  add_log("<b>Welcome to HoneyMap. This is an ALPHA version! Bug reports welcome :-)</b><br/><br/>");
+  $('#helpmodal').hide();
   </script>
+
 </body>
 
 </html>
