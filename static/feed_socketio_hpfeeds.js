@@ -35,5 +35,5 @@ socket.on('marker', function(data) {
   if(lat2 == null || lng2 == null) { return; }
   var p2 = mapobj.latLngToPoint(lat2,lng2);
   if(p2.x == 0 || p2.y == 0) { return; }
-  add_marker_ll(lat2, lng2, 'dst');
+  add_marker_ll(lat2, lng2, 'dst', data.type);
 });
