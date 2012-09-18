@@ -1,6 +1,6 @@
 var regionhits = {};
 var markerhits = {};
-var markers_visible_max = 50;
+var markers_visible_max = 100;
 var markers_total = 0;
 
 function remove_finished_animations() {
@@ -96,6 +96,15 @@ function add_marker_ll(lat, lng, type) {
   }
 }
 
+function update_regioncolors() {
+  // Force recomputation of min and max for correct color scaling
+  mapobj.series.regions[0].params.min = null;
+  mapobj.series.regions[0].params.max = null;
+  // Update data
+  mapobj.series.regions[0].setValues(regionhits);
+}
+
+/*
 function draw_line(x1, y1, x2, y2) {
   svg.append('<g><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke-width="2" /></g>');
 }
@@ -105,11 +114,4 @@ function draw_line_ll(lat1, lng1, lat2, lng2) {
   var p2 = mapobj.latLngToPoint(lat2, lng2);
   draw_line(p1.x, p1.y, p2.x, p2.y);
 }
-
-function update_regioncolors() {
-  // Force recomputation of min and max for correct color scaling
-  mapobj.series.regions[0].params.min = null;
-  mapobj.series.regions[0].params.max = null;
-  // Update data
-  mapobj.series.regions[0].setValues(regionhits);
-}
+*/
