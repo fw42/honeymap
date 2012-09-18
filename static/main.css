@@ -39,6 +39,14 @@ a {
   color: red;
 }
 
+.log_bracket2 {
+  color: #4b81db;
+}
+
+.log_country {
+  font-weight: bold;
+}
+
 #logo1 {
   position: absolute;
   left: 1%;

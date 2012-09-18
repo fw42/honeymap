@@ -40,3 +40,4 @@ $('#world-map').vectorMap({
   }
 });
 var mapobj = $('#world-map').vectorMap('get', 'mapObject');
+mapobj.regions['US'].config.name = "USA";

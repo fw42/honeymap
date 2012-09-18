@@ -36,5 +36,5 @@ Authors
 
 TODO
 ----
-* Popup with explanation/legend/stuff
+* Marker hovers dont work when animation is in progress
 * Browser compatibility (only Webkit and Firefox right now)
