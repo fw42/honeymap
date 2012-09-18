@@ -24,15 +24,15 @@ socket.on('marker', function(data) {
     logstr += "</div>";
     logstr += ' <div class="log_bracket">&lt;</div>' + data.type + '<div class="log_bracket">&gt;</div> ';
     logstr += 'New ' + (data.type == "thug" ? "scan" : "attack") + ' from <div class="log_country">' + region1 + '</div>' +
-      " <small>(" + lat1.toFixed(2) + ", " + lng1.toFixed(2) + ")</small>";
+      " <small>(" + lat1.toFixed(2) + "," + lng1.toFixed(2) + ")</small>";
 
     if(region2 != null) {
       logstr += ' to <div class="log_country">' + region2 + "</div>" +
-        " <small>(" + lat2.toFixed(2) + ", " + lng2.toFixed(2) + ")</small>";
+        " <small>(" + lat2.toFixed(2) + "," + lng2.toFixed(2) + ")</small>";
     }
 
     if(data.md5) {
-      logstr += ' <div class="log_bracket2">[</div>md5: <a href="http://www.virustotal.com/search/?query=' + data.md5 + '">' + data.md5 + '</a><div class="log_bracket2">]</div>';
+      logstr += ' <div class="log_bracket2">[</div><div class="log_info">md5: <a href="http://www.virustotal.com/search/?query=' + data.md5 + '">' + data.md5 + '</a><div class="log_bracket2">]</div></div>';
     }
     add_log(logstr + "<br/>");
   }

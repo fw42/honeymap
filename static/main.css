@@ -31,7 +31,7 @@ a {
   display: inline;
 }
 
-.log_timestamp {
+.log_timestamp, .log_info, .log_info a {
   color: silver;
 }
 
