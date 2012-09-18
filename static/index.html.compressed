@@ -18,7 +18,7 @@
   <div id="logo2"><a href="http://www.itsec.rwth-aachen.de/"><img src="img/itsec_logo.png"></a></div>
   <div id="helpbtn"><a href="#helpmodal" data-toggle="modal"><img src="img/help.png" alt="Help" /></a></div>
 
-  <div class="modal" id="helpmodal" tabindex="-1" role="dialog" aria-labelledby="helpmodal" aria-hidden="true">
+  <div class="modal hide" id="helpmodal" tabindex="-1" role="dialog" aria-labelledby="helpmodal" aria-hidden="true" data-show="false">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
       <h3>HoneyMap</h3>
@@ -64,11 +64,9 @@
 
   <script type="text/javascript">
   add_log("<b>Welcome to HoneyMap. This is an ALPHA version! Bug reports welcome :-)</b><br/><br/>");
-  $('#helpmodal').hide();
   </script>
 
   <script src="google_analytics.js"></script>
-
 </body>
 
 </html>

@@ -27,6 +27,18 @@ a {
   font-size: 75%;
 }
 
+#log div {
+  display: inline;
+}
+
+.log_timestamp {
+  color: silver;
+}
+
+.log_bracket {
+  color: red;
+}
+
 #logo1 {
   position: absolute;
   left: 1%;
@@ -58,6 +70,7 @@ a {
 .modal {
   color: black;
   font-family: "Trebuchet MS", sans-serif;
+  display: none;
 }
 
 .modal a {

@@ -13,23 +13,20 @@ socket.on('marker', function(data) {
 
   if(get_regionname_ll(lat1, lng1) != null) {
     var logstr;
-    logstr = "New attack in " + get_regionname_ll(lat1, lng1) +
+
+    if(data.type == null) { data.type = "other"; }
+
+    logstr  = '<div class="log_timestamp">';
+    logstr += new Date().toTimeString().substring(0,8);
+    logstr += "</div>";
+    logstr += ' <div class="log_bracket">&lt;</div>' + data.type + '<div class="log_bracket">&gt;</div> ';
+    logstr += "New attack in " + get_regionname_ll(lat1, lng1) +
       " <small>(" + lat1.toFixed(2) + ", " + lng1.toFixed(2) + ")</small>";
-    if(data.type || data.md5) {
-      logstr += " [";
-      if(data.type) {
-        logstr += "type: " + data.type;
-      }
-      if(data.md5) {
-        if(data.type) {
-          logstr += ", ";
-        }
-        logstr += 'md5: <a href="http://www.virustotal.com/search/?query=' + data.md5 + '">' + data.md5 + '</a>';
-      }
-      logstr += "]";
+
+    if(data.md5) {
+      logstr += ' [md5: <a href="http://www.virustotal.com/search/?query=' + data.md5 + '">' + data.md5 + '</a>]';
     }
-    logstr += "<br/>";
-    add_log(logstr);
+    add_log(logstr + "<br/>");
   }
 
   if(p1.x == 0 && p1.y == 0) { return; }
@@ -39,5 +36,4 @@ socket.on('marker', function(data) {
   if(lat2 == null || lng2 == null) { return; }
   if(p2.x == 0 || p2.y == 0) { return; }
   add_marker_ll(lat2, lng2, 'dst');
-//draw_line(p1.x, p1.y, p2.x, p2.y);
 });
