@@ -13,10 +13,13 @@ function remove_finished_animations() {
 
 function marker_animation(x, y, css) {
   remove_finished_animations();
-  $("#world-map")
-    .append($('<div class="marker_animation ' + css + '"></div>')
+  $("#world-map").append(
+    $('<div class="marker_animation ' + css + '"></div>')
     .css('left', x + 'px')
-    .css('top', y + 'px'));
+    .css('top', y + 'px')
+    .css({ opacity: 1, scale: 0 })
+    .transition({ opacity: 0, scale: 1 }, 1000)
+  );
 }
 
 function marker_animation_ll(lat, lng, css) {

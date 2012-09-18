@@ -23,7 +23,7 @@ a {
   color: white;
   border: 1px solid white;
   padding: 5px;
-  font-family: "Andale Mono", "Courier", monospace, Fixed;
+  font-family: 'Ubuntu Mono', sans-serif;
   font-size: 75%;
 }
 
@@ -51,26 +51,14 @@ a {
 
 .marker_animation {
   position: absolute;
-
+  opacity: 0;
+  border-radius: 100px;
+  -moz-border-radius: 100px;
   /* 40px radius, move origin to center */
   height: 80px;
   width: 80px;
   margin-top: -40px;
   margin-left: -40px;
-
-  opacity: 0;
-
-  animation: marker_popup 1s;
-  -webkit-animation: marker_popup 1s;
-  -moz-animation: marker_popup 1s;
-
-  transform: scale3d(0, 0, 0);
-  -webkit-transform: scale3d(0, 0, 0);
-  -moz-transform: scale3d(0, 0, 0);
-
-  border-radius: 100px;
-  -moz-border-radius: 100px;
-
 }
 
 .markerdst {
@@ -79,44 +67,4 @@ a {
 
 .markersrc {
   background-color: red;
-}
-
-@-webkit-keyframes marker_popup {
-
-  0% {
-    opacity: 1;
-    display: block;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    -webkit-transform: scale3d(1, 1, 0);
-    -webkit-box-shadow: rgba(0, 0, 0, 0) 10px 10px 0;
-    display: none;
-  }
-
-}
-
-@-moz-keyframes marker_popup {
-
-  0% {
-    opacity: 1;
-    display: block;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    -moz-transform: scale3d(1, 1, 0);
-    -moz-box-shadow: rgba(0, 0, 0, 0) 10px 10px 0;
-    display: none;
-  }
-
 }
