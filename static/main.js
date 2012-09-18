@@ -1,4 +1,5 @@
 var regionhits = {};
+var regionhits_countonly = {};
 var markerhits = {};
 var markers_visible_max = 100;
 var markers_total = 0;
@@ -66,9 +67,10 @@ function add_marker_ll(lat, lng, type, eventname) {
     // only count src markers which are within a valid region
     var region = get_regioncode_ll(lat, lng);
     if(region) {
-      if(regionhits[region] == null) { regionhits[region] = {}; }
+      if(regionhits[region] == null) { regionhits[region] = {}; regionhits_countonly[region] = 0; }
       if(regionhits[region][eventname] == null) { regionhits[region][eventname] = 0; }
       regionhits[region][eventname]++;
+      regionhits_countonly[region]++;
     }
   }
   var markerkey = lat+","+lng;
@@ -100,5 +102,5 @@ function update_regioncolors() {
   mapobj.series.regions[0].params.min = null;
   mapobj.series.regions[0].params.max = null;
   // Update data
-  mapobj.series.regions[0].setValues(regionhits);
+  mapobj.series.regions[0].setValues(regionhits_countonly);
 }

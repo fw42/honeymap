@@ -36,4 +36,5 @@ Authors
 
 TODO
 ----
+* Popup with explanation/legend/stuff
 * Browser compatibility (only Webkit and Firefox right now)
