@@ -1,5 +1,12 @@
 var socket = io.connect('/');
 
+function set_marker_caption(id, lat, lng, countrycode, city) {
+  markercaptions[id] = "<small>(" + lat + ", " + lng + ")</small><br/>";
+  if(city) {
+    markercaptions[id] += "<big>" + city + "</big> (" + countrycode + ")";
+  }
+}
+
 socket.on('marker', function(data) {
   var lat1 = data.latitude,  lng1 = data.longitude,
       lat2 = data.latitude2, lng2 = data.longitude2;
@@ -14,6 +21,14 @@ socket.on('marker', function(data) {
   var region1 = get_regionname_ll(lat1, lng1);
   var region2 = get_regionname_ll(lat2, lng2);
 
+  if(region1 == null && data.countrycode != null && mapobj.regions[data.countrycode] != null) {
+    region1 = mapobj.regions[data.countrycode].config.name;
+  }
+
+  if(region2 == null && data.countrycode2 != null && mapobj.regions[data.countrycode2] != null) {
+    region2 = mapobj.regions[data.countrycode2].config.name;
+  }
+
   if(region1 != null) {
     var logstr;
 
@@ -23,11 +38,12 @@ socket.on('marker', function(data) {
     logstr += new Date().toTimeString().substring(0,8);
     logstr += "</div>";
     logstr += ' <div class="log_bracket">&lt;</div>' + data.type + '<div class="log_bracket">&gt;</div> ';
-    logstr += 'New ' + (data.type == "thug" ? "scan" : "attack") + ' from <div class="log_country">' + region1 + '</div>' +
-      " <small>(" + lat1.toFixed(2) + "," + lng1.toFixed(2) + ")</small>";
+    logstr += 'New ' + (data.type == "thug" ? "scan" : "attack") + ' from ' + 
+      '<div class="log_country">' + (data.city ? (data.city + ", ") : "") + region1 + '</div>' + 
+      ' <small>(' + lat1.toFixed(2) + "," + lng1.toFixed(2) + ")</small>";
 
     if(region2 != null) {
-      logstr += ' to <div class="log_country">' + region2 + "</div>" +
+      logstr += ' to <div class="log_country">' + (data.city2 ? (data.city2 + ", ") : "") + region2 + "</div>" +
         " <small>(" + lat2.toFixed(2) + "," + lng2.toFixed(2) + ")</small>";
     }
 
@@ -38,10 +54,13 @@ socket.on('marker', function(data) {
   }
 
   add_marker_ll(lat1, lng1, 'src', data.type);
+  set_marker_caption(lat1+","+lng1, lat1, lng1, data.countrycode, data.city);
   update_regioncolors();
 
   if(lat2 == null || lng2 == null) { return; }
   var p2 = mapobj.latLngToPoint(lat2,lng2);
   if(p2.x == 0 || p2.y == 0) { return; }
-  add_marker_ll(lat2, lng2, 'dst', data.type);
+  add_marker_ll(lat2, lng2, 'dst', data.type, data.countrycode2);
+  set_marker_caption(lat2+","+lng2, lat2, lng2, data.countrycode2, data.city2);
+
 });

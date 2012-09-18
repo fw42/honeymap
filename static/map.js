@@ -35,7 +35,7 @@ $('#world-map').vectorMap({
     label.append(event_count_summary(regionhits[code]));
   },
   onMarkerLabelShow: function(ev, label, code) {
-    label.html("<big>" + label.html() + "</big>");
+    label.html(markercaptions[code]);
     label.append(event_count_summary(markerhits[code]));
   }
 });

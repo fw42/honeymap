@@ -19,6 +19,8 @@ a {
 #log {
   margin: 1% auto 0px auto;
   overflow: auto;
+  overflow-x: hidden;
+  white-space: nowrap;
   background-color: black;
   color: white;
   border: 1px solid white;

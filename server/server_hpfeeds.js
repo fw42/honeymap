@@ -52,7 +52,11 @@ feedconn.msgcb = function(id, chan, data) {
   if(data != null) {
     io.sockets.emit('marker', {
       latitude: data.latitude, longitude: data.longitude,
+      countrycode: data.countrycode, country: data.country, city: data.city,
+
       latitude2: data.latitude2, longitude2: data.longitude2,
+      countrycode2: data.countrycode2, country2: data.country2, city2: data.city2,
+ 
       type: data.type, md5: data.md5
     });
   }

@@ -1,6 +1,7 @@
 var regionhits = {};
 var regionhits_countonly = {};
 var markerhits = {};
+var markercaptions = {};
 var markers_visible_max = 100;
 var markers_total = 0;
 
@@ -73,7 +74,7 @@ function add_marker_ll(lat, lng, type, eventname) {
       regionhits_countonly[region]++;
     }
   }
-  var markerkey = lat+","+lng;
+  var markerkey = lat + "," + lng;
   if(markerhits[markerkey] == null) { markerhits[markerkey] = {}; }
   if(markerhits[markerkey][eventname] == null) { markerhits[markerkey][eventname] = 0; }
   markerhits[markerkey][eventname]++;
