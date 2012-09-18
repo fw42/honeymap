@@ -99,6 +99,7 @@ a {
   width: 80px;
   margin-top: -40px;
   margin-left: -40px;
+  pointer-events: none; /* dont kill the hover event of markers */
 }
 
 .markerdst {
