@@ -17,15 +17,37 @@ a {
 }
 
 #log {
-  margin: 0px auto 0px auto;
+  margin: 1% auto 0px auto;
   overflow: auto;
   background-color: black;
   color: white;
   border: 1px solid white;
   padding: 5px;
   font-family: "Andale Mono", "Courier", monospace, Fixed;
-  font-size: 80%;
+  font-size: 75%;
 }
+
+#logo1 {
+  position: absolute;
+  left: 1%;
+  bottom: 1%;
+  max-width: 20%;
+}
+
+#logo1 img, #logo2 img {
+  width: 100%;
+}
+
+#logo2 {
+  position: absolute;
+  right: 1%;
+  bottom: 1%;
+  max-width: 20%;
+}
+
+
+
+/*************************** ANIMATION STUFF ************************************/
 
 .marker_animation {
   position: absolute;
@@ -97,16 +119,4 @@ a {
     display: none;
   }
 
-}
-
-#logo1 {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-}
-
-#logo2 {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
 }
