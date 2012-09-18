@@ -40,9 +40,11 @@ function handler (req, res) {
 
 // Push feed data to all connected sockets
 feedconn.msgcb = function(id, chan, data) {
-  io.sockets.emit('marker', {
-    latitude: data.latitude, longitude: data.longitude,
-    latitude2: data.latitude2, longitude2: data.longitude2,
-    type: data.type, md5: data.md5
-  });
+  if(data != null) {
+    io.sockets.emit('marker', {
+      latitude: data.latitude, longitude: data.longitude,
+      latitude2: data.latitude2, longitude2: data.longitude2,
+      type: data.type, md5: data.md5
+    });
+  }
 }
