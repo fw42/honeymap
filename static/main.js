@@ -3,22 +3,13 @@ var markerhits = {};
 var markers_visible_max = 100;
 var markers_total = 0;
 
-function remove_finished_animations() {
-  $(".marker_animation").each(function(i) {
-    if($(this).css("opacity") == 0) {
-      $(this).remove();
-    }
-  });
-}
-
 function marker_animation(x, y, css) {
-  remove_finished_animations();
   $("#world-map").append(
     $('<div class="marker_animation ' + css + '"></div>')
     .css('left', x + 'px')
     .css('top', y + 'px')
     .css({ opacity: 1, scale: 0 })
-    .transition({ opacity: 0, scale: 1 }, 1000)
+    .transition({ opacity: 0, scale: 1 }, 1000, 'linear', function(){ $(this).remove(); })
   );
 }
 
@@ -67,18 +58,23 @@ function remove_oldest_marker() {
     par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
 }
 
-function add_marker_ll(lat, lng, type) {
+function add_marker_ll(lat, lng, type, eventname) {
+  if(eventname == null) { eventname = "other"; }
   if(type == null) {
     type == 'src';
   } else if(type == 'src') {
     // only count src markers which are within a valid region
     var region = get_regioncode_ll(lat, lng);
     if(region) {
-      regionhits[region] = regionhits[region] ? regionhits[region] + 1 : 1;
+      if(regionhits[region] == null) { regionhits[region] = {}; }
+      if(regionhits[region][eventname] == null) { regionhits[region][eventname] = 0; }
+      regionhits[region][eventname]++;
     }
   }
   var markerkey = lat+","+lng;
-  markerhits[markerkey] = markerhits[markerkey] ? (markerhits[markerkey] + 1) : 1;
+  if(markerhits[markerkey] == null) { markerhits[markerkey] = {}; }
+  if(markerhits[markerkey][eventname] == null) { markerhits[markerkey][eventname] = 0; }
+  markerhits[markerkey][eventname]++;
   marker_animation_ll(lat, lng, type == 'dst' ? 'markerdst' : 'markersrc');
   // only add markers which do not exist yet
   if(mapobj.markers[markerkey] == null) {
@@ -106,15 +102,3 @@ function update_regioncolors() {
   // Update data
   mapobj.series.regions[0].setValues(regionhits);
 }
-
-/*
-function draw_line(x1, y1, x2, y2) {
-  svg.append('<g><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke-width="2" /></g>');
-}
-
-function draw_line_ll(lat1, lng1, lat2, lng2) {
-  var p1 = mapobj.latLngToPoint(lat1, lng1);
-  var p2 = mapobj.latLngToPoint(lat2, lng2);
-  draw_line(p1.x, p1.y, p2.x, p2.y);
-}
-*/

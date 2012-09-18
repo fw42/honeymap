@@ -33,7 +33,7 @@ socket.on('marker', function(data) {
   }
 
   if(p1.x == 0 && p1.y == 0) { return; }
-  add_marker_ll(lat1, lng1, 'src');
+  add_marker_ll(lat1, lng1, 'src', data.type);
   update_regioncolors();
 
   if(lat2 == null || lng2 == null) { return; }

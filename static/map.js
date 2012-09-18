@@ -1,3 +1,18 @@
+// small helper method to format the hover labels
+function event_count_summary(hash) {
+  var summary = "";
+  var total = 0;
+  for(type in hash) {
+    if(total == 0) { summary += "<br/><hr/>"; }
+    summary += "<b>" + type + "</b>: " + (hash[type] ? hash[type] : 0) + "<br/>";
+    total += hash[type];
+  }
+  if(total > 0) {
+    summary += "<hr/><b>total</b>: " + total + " events";
+  }
+  return summary;
+}
+
 $('#world-map').vectorMap({
   backgroundColor: '',
   markerStyle: {
@@ -16,17 +31,12 @@ $('#world-map').vectorMap({
     }]
   },
   onRegionLabelShow: function(ev, label, code) {
-    label.html(
-      "<b>" + label.html() + "</b><br/>" +
-      (regionhits[code] ? regionhits[code] : 0) + " events"
-    );
+    label.html("<big>" + label.html() + "</big>");
+    label.append(event_count_summary(regionhits[code]));
   },
   onMarkerLabelShow: function(ev, label, code) {
-    label.html(
-      "<b>" + label.html() + "</b><br/>" +
-      markerhits[code] + " events"
-    );
+    label.html("<big>" + label.html() + "</big>");
+    label.append(event_count_summary(markerhits[code]));
   }
 });
 var mapobj = $('#world-map').vectorMap('get', 'mapObject');
-var svg = $('svg');

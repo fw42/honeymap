@@ -3,9 +3,11 @@ HoneyMap
 
 HoneyMap is a web application which displays a live stream of
 GPS locations on a SVG world map. It makes use of
-[node.js](http://nodejs.org/) and
+[jQuery](http://jquery.com/),
+[node.js](http://nodejs.org/),
 [socket.io](http://socket.io/) (HTML5 websockets),
-[jVectorMap](http://jvectormap.com/) and HTML5/CSS3 animations.
+[jVectorMap](http://jvectormap.com/) and
+[jQuery Transit](http://ricostacruz.com/jquery.transit/) for CSS3 animations.
 
 In principle, it can be used with any stream of GPS data. For our application,
 we use honeypot captures, provided by several [hpfeeds](https://github.com/rep/hpfeeds)
@@ -16,6 +18,11 @@ Tested with node.js v0.8.9 and socket.io v0.9.10.
 Example
 -------
 [http://map.honeycloud.net/](http://map.honeycloud.net/)
+
+Browser support
+---------------
+Should work with current Chrome and Firefox browsers.
+Opera, Safari and IE not tested yet.
 
 License
 -------
@@ -29,4 +36,4 @@ Authors
 
 TODO
 ----
-* Browser compatibility (only webkit atm)
+* Browser compatibility (only Webkit and Firefox right now)
