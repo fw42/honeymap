@@ -25,6 +25,7 @@ $('#world-map').vectorMap({
   series: {
     markers: [],
     regions: [{
+      scale: [ '#FFFFFF', '#0071a4' ],
       attribute: 'fill',
       normalizeFunction: 'linear',
       values: regionhits

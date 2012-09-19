@@ -103,8 +103,10 @@ a {
 
 .markerdst {
   background-color: yellow;
+  z-index: 10;
 }
 
 .markersrc {
   background-color: red;
+  z-index: 20;
 }
