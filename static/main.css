@@ -99,6 +99,7 @@ a {
   margin-top: -40px;
   margin-left: -40px;
   pointer-events: none; /* dont kill the hover event of markers */
+  -webkit-transform: translateZ(0); /* little trick to force GPU acceleration */
 }
 
 .markerdst {

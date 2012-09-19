@@ -17,7 +17,13 @@ Tested with node.js v0.8.9 and socket.io v0.9.10.
 
 Example
 -------
-[http://map.honeycloud.net/](http://map.honeycloud.net/)
+* [http://map.honeycloud.net/](http://map.honeycloud.net/)
+
+Requirements
+------------
+* `npm install node-static`
+* `npm install socket.io`
+* `npm install validator`
 
 Browser support
 ---------------
@@ -38,5 +44,4 @@ TODO
 ----
 * Make maximal number of visible markers configurable by user
 * "Replay" feature (load last x hours from server)
-* More color levels for color scaling of regions
-* Browser compatibility (only Webkit and Firefox right now)
+* Browser compatibility (only Webkit and Firefox right now; No Mobile browsers)

@@ -7,6 +7,7 @@ var ns = require('node-static');
 var io = require('socket.io').listen(app);
 var hpfeeds = require('hpfeeds');
 var file = new(ns.Server)("../static/", { cache: 600 });
+var sanitize = require('validator').sanitize;
 
 eval(fs.readFileSync('server_hpfeeds_config.js').toString());
 
@@ -63,7 +64,8 @@ feedconn.msgcb = function(id, chan, data) {
       latitude2: data.latitude2, longitude2: data.longitude2,
       countrycode2: data.countrycode2, country2: data.country2, city2: data.city2,
  
-      type: data.type, md5: data.md5
+      type: data.type ? sanitize(data.type).xss() : null,
+      md5: data.md5 ? sanitize(data.md5).xss() : null
     });
   }
 }
