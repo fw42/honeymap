@@ -14,6 +14,12 @@ eval(fs.readFileSync('server_hpfeeds_config.js').toString());
 app.listen(config.port);
 process.setuid(config.uid);
 
+// Production settings for socket.io
+io.enable('browser client minification');  // send minified client
+io.enable('browser client etag');          // apply etag caching logic based on version number
+io.enable('browser client gzip');          // gzip the file
+io.set('log level', 1);                    // reduce logging
+
 // hp feed
 var feedconn = new hpfeeds.HPC(
   config.hpfeeds.server,
