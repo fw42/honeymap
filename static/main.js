@@ -48,8 +48,12 @@ function get_regionname_ll(lat, lng) {
 }
 
 function add_log(msg) {
+  // only automatically scroll down if the user did not manually scroll up before :-)
+  var scroll = $('#log').scrollTop() + $('#log').innerHeight() == $('#log')[0].scrollHeight;
   $('#log').append(msg);
-  $("#log").scrollTop($("#log")[0].scrollHeight);
+  if(scroll) {
+    $("#log").scrollTop($("#log")[0].scrollHeight);
+  }
 }
 
 function remove_oldest_marker() {

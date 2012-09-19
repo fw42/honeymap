@@ -3,7 +3,6 @@ body {
   padding: 0px;
   background-color: #021320;
   color: white;
-
   background: -moz-linear-gradient(top, #021320, #03244b, #021320);
   background: -webkit-linear-gradient(top, #021320, #03244b, #021320);
 }
@@ -25,7 +24,7 @@ a {
   color: white;
   border: 1px solid white;
   padding: 5px;
-  font-family: 'Ubuntu Mono', sans-serif;
+  font-family: 'Ubuntu Mono', monospace, fixed, sans-serif;
   font-size: 75%;
 }
 
