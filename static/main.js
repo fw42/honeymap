@@ -62,8 +62,9 @@ function remove_oldest_marker() {
 function add_marker_ll(lat, lng, type, eventname) {
   if(eventname == null) { eventname = "other"; }
   if(type == null) {
-    type == 'src';
-  } else if(type == 'src') {
+    type = 'src';
+  }
+  if(type == 'src') {
     // only count src markers which are within a valid region
     var region = get_regioncode_ll(lat, lng);
     if(region) {
