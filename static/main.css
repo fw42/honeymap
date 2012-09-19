@@ -110,3 +110,7 @@ a {
   background-color: red;
   z-index: 20;
 }
+
+.jvectormap-label {
+  z-index: 30;
+}
