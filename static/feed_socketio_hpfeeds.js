@@ -18,15 +18,18 @@ socket.on('marker', function(data) {
   var p1 = mapobj.latLngToPoint(lat1,lng1);
   if(p1.x == 0 && p1.y == 0) { return; }
 
-  var region1 = get_regionname_ll(lat1, lng1);
-  var region2 = get_regionname_ll(lat2, lng2);
-
-  if(region1 == null && data.countrycode != null && mapobj.regions[data.countrycode] != null) {
+  var region1;
+  if(data.countrycode != null && mapobj.regions[data.countrycode] != null) {
     region1 = mapobj.regions[data.countrycode].config.name;
+  } else {
+    region1 = get_regionname_ll(lat1, lng1);
   }
 
-  if(region2 == null && data.countrycode2 != null && mapobj.regions[data.countrycode2] != null) {
+  var region2;
+  if(data.countrycode2 != null && mapobj.regions[data.countrycode2] != null) {
     region2 = mapobj.regions[data.countrycode2].config.name;
+  } else {
+    region2 = get_regionname_ll(lat2, lng2);
   }
 
   if(region1 != null) {
