@@ -63,15 +63,15 @@ function remove_oldest_marker() {
     par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
 }
 
-function add_marker_ll(lat, lng, type, eventname) {
+function add_marker_ll(lat, lng, type, eventname, region) {
   if(eventname == null) { eventname = "other"; }
   if(type == null) {
     type = 'src';
   }
   if(type == 'src') {
     // only count src markers which are within a valid region
-    var region = get_regioncode_ll(lat, lng);
-    if(region) {
+    if(region == null) { region = get_regioncode_ll(lat, lng); }
+    if(region != null) {
       if(regionhits[region] == null) { regionhits[region] = {}; regionhits_countonly[region] = 0; }
       if(regionhits[region][eventname] == null) { regionhits[region][eventname] = 0; }
       regionhits[region][eventname]++;

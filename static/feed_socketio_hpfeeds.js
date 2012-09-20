@@ -56,7 +56,7 @@ socket.on('marker', function(data) {
     add_log(logstr + "<br/>");
   }
 
-  add_marker_ll(lat1, lng1, 'src', data.type);
+  add_marker_ll(lat1, lng1, 'src', data.type, data.countrycode);
   set_marker_caption(lat1+","+lng1, lat1, lng1, data.countrycode, data.city);
   update_regioncolors();
 
