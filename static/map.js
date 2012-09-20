@@ -17,15 +17,15 @@ $('#world-map').vectorMap({
   backgroundColor: '',
   markerStyle: {
     initial: {
-      fill: 'red',
-      stroke: 'darkred',
+      fill: markersrc_color.fill,
+      stroke: markersrc_color.stroke,
       r: 3
     }
   },
   series: {
     markers: [],
     regions: [{
-      scale: [ '#FFFFFF', '#0071a4' ],
+      scale: [ '#FFFFFF', '#0071A4' ],
       attribute: 'fill',
       normalizeFunction: 'linear',
       values: regionhits

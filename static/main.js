@@ -1,8 +1,12 @@
+/** config **/
+var markers_visible_max = 150;
+var markersrc_color = { fill: 'red', stroke: 'darkred' };
+var markerdst_color = { fill: '#F8E23B', stroke: '#383F47' };
+
 var regionhits = {};
 var regionhits_countonly = {};
 var markerhits = {};
 var markercaptions = {};
-var markers_visible_max = 150;
 var markers_total = 0;
 
 function marker_animation(x, y, css) {
@@ -57,17 +61,16 @@ function add_log(msg) {
 }
 
 function remove_oldest_marker() {
-    toremove = $($("#world-map svg g circle.jvectormap-marker")[0]);
-    par = toremove.parent();
-    mapobj.removeMarkers( [ toremove.attr('data-index') ]);
-    par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
+  // only remove src markers
+  toremove = $($("#world-map svg g circle.jvectormap-marker[fill=" + markersrc_color.fill + "]")[0]);
+  par = toremove.parent();
+  mapobj.removeMarkers( [ toremove.attr('data-index') ]);
+  par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
 }
 
 function add_marker_ll(lat, lng, type, eventname, region) {
   if(eventname == null) { eventname = "other"; }
-  if(type == null) {
-    type = 'src';
-  }
+  if(type == null) { type = 'src'; }
   if(type == 'src') {
     // only count src markers which are within a valid region
     if(region == null) { region = get_regioncode_ll(lat, lng); }
@@ -91,7 +94,7 @@ function add_marker_ll(lat, lng, type, eventname, region) {
     if(type == 'dst') {
       mapobj.addMarker(markerkey, {
        latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")",
-       style: { fill: '#F8E23B', stroke: '#383f47' }
+       style: markerdst_color
       }, []);
     } else {
       mapobj.addMarker(markerkey, {
