@@ -32,7 +32,7 @@
       <p>
         You are looking at the <b>HoneyMap</b>, a real-time world map which visualizes attacks
         captured by honeypots of the <a href="http://www.honeynet.org/">Honeynet Project</a>.
-        Red markers on the map stand for attacks, yellow markers are sensors (honeypots).
+        Red markers on the map represent attacks, yellow markers are sensors (honeypots).
       </p>
       <p>
         This project is highly experimental and should be considered an ALPHA version. So far,
@@ -59,6 +59,45 @@
         <li>Florian Weingarten (<a href="mailto:flo@hackvalue.de">flo@hackvalue.de</a>)</li>
         <li>Mark Schloesser (<a href="mailto:ms@mwcollect.org">ms@mwcollect.org</a>)</li>
       </ul>
+
+      <h3>Frequently Asked Questions</h3>
+      <h4>What am I looking at? Is this real?</h4>
+      <p>
+        Yes, you are looking at real attacks which are
+        captured by our honeypot sensors. Those sensors emulate
+        vulnerable systems and record incoming attacks.
+      </p>
+      <p>
+        Sensors run
+        <a href="http://dionaea.carnivore.it/">dioanea</a>,
+        <a href="http://glastopf.org/">glastopf</a>, or 
+        <a href="https://github.com/buffer/thug">thug</a>.
+      </p>
+      <h4>Where does the data come from?</h4>
+      Some (by far not all) of our sensors publish their captures
+      to our internal feed system
+      (<a href="https://github.com/rep/hpfeeds">hpfeeds</a>).
+      The map backend subscribes to this feed and makes geo location
+      lookups on the corresponding IP addresses.
+      <h4>Is the data representative?</h4>
+      No! Not at all. The Honeynet Project has many more sensors
+      around the world, but only a few push their captures.
+      <h4>What is going on in Aachen?!</h4>
+      Most of the time, you will see attacks targeted against Aachen.
+      This is because our honeypot at RWTH Aachen University is very
+      active and captures attacks against hundreds of target IP
+      addresses. This does not mean that Aachen is attacked more
+      often than the rest of the world!
+      <h4>How can I participate?</h4>
+      If you are already a member of the Honeynet Project, you can
+      just publish your captures to hpfeeds and they will automatically
+      show up on this map. If you are not a member, you can run your own
+      copy of this map on your own server. Code is on GitHub
+      (LGPL license).
+      <h4>Why did you create this map?</h4>
+      Just for fun. We like visualization and we wanted to play
+      around with node.js/socket.io. This map was hacked together
+      in essentially 2-3 days.
     </div>
     <div class="modal-footer">
       <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
