@@ -53,7 +53,7 @@ socket.on('marker', function(data) {
     if(data.md5) {
       logstr += ' <div class="log_bracket2">[</div><div class="log_info">md5: <a href="http://www.virustotal.com/search/?query=' + data.md5 + '">' + data.md5 + '</a><div class="log_bracket2">]</div></div>';
     }
-    add_log(logstr + "<br/>");
+    add_log(logstr);
   }
 
   add_marker_ll(lat1, lng1, 'src', data.type, data.countrycode);
