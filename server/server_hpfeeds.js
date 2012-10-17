@@ -69,3 +69,9 @@ feedconn.msgcb = function(id, chan, data) {
     });
   }
 }
+
+io.sockets.on('connection', function (socket) {
+  socket.on('disconnect', function() {
+    delete socket.namespace.sockets[socket.id];
+  })
+})
