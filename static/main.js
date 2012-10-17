@@ -60,7 +60,7 @@ function add_log(msg) {
   }
   // only automatically scroll down if the user did not manually scroll up before :-)
   var scroll = $('#log').scrollTop() + $('#log').innerHeight() == $('#log')[0].scrollHeight;
-  $('#log').append('<div class="log_entry">' + msg + '</div><br/>');
+  $('#log').append('<div class="log_entry">' + msg + '<br/></div>');
   if(scroll) {
     $("#log").scrollTop($("#log")[0].scrollHeight);
   }
