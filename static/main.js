@@ -53,14 +53,16 @@ function get_regionname_ll(lat, lng) {
 
 function add_log(msg) {
   // remove old log entries from time to time
-  entries = $("div.log_entry");
+  entries = $("#log div.log_entry");
   if(entries.length > markers_visible_max) {
     // dont remove them all, only a few, so we dont see them disappear
     entries.slice(0, markers_visible_max/2).remove();
+    // remove abandoned line breaks
+    $('#log br').nextUntil('div.log_entry', 'br').remove();
   }
   // only automatically scroll down if the user did not manually scroll up before :-)
   var scroll = $('#log').scrollTop() + $('#log').innerHeight() == $('#log')[0].scrollHeight;
-  $('#log').append('<div class="log_entry">' + msg + '<br/></div>');
+  $('#log').append('<div class="log_entry">' + msg + '</div><br/>');
   if(scroll) {
     $("#log").scrollTop($("#log")[0].scrollHeight);
   }
