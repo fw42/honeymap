@@ -12,7 +12,7 @@
   <script src="extern/jquery-jvectormap-1.0.min.js"></script>
   <script src="extern/jquery-jvectormap-world-mill-en.js"></script>
   <script src="extern/bootstrap.js"></script>
-  <script src="extern/jquery-transit.min.js"></script>
+  <script src="extern/jquery-transit.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 </head>
 
