@@ -33,7 +33,8 @@ io.sockets.on('connection', function (socket) {
     var lat, lng;
     lat = Math.random() * 180 - 90;
     lng = Math.random() * 360 - 180;
-    socket.emit('marker', { lat: lat, lng: lng });
+    socket.emit('marker', { lat: lat, lng: lng
+    socket.broadcast.emit('marker', {lat: lat, lng: lng});
   }
   setInterval(function() { setTimeout(random_point, Math.random() * 1000) }, 500);
 });
