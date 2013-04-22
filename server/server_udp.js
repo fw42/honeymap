@@ -17,12 +17,13 @@ app.listen(8081);
 // process.setuid(config.uid);
 
 // Production settings for socket.io
-io.enable('browser client minification');  // send minified client
-io.enable('browser client etag');          // apply etag caching logic based on version number
-io.enable('browser client gzip');          // gzip the file
+//io.enable('browser client minification');  // send minified client
+//io.enable('browser client etag');          // apply etag caching logic based on version number
+//io.enable('browser client gzip');          // gzip the file
 io.set('log level', 1);                    // reduce logging
 
 var udpserver = dgram.createSocket("udp4");
+var udpserver2 = dgram.createSocket("udp4");
 
 udpserver.on("listening", function () {
   var address = udpserver.address();
@@ -30,7 +31,14 @@ udpserver.on("listening", function () {
       address.address + ":" + address.port);
 });
 
+udpserver2.on("listening", function () {
+  var address = udpserver2.address();
+  console.log("udpserver2 listening " +
+      address.address + ":" + address.port);
+});
+
 udpserver.bind(41234);
+udpserver2.bind(41235);
 
 // Serve static content
 function handler (req, res) {
@@ -85,6 +93,29 @@ udpserver.on("message", function (msg, rinfo) {
  
       // type: data.type ? sanitize(data.type).xss() : null,
       // md5: data.md5 ? sanitize(data.md5).xss() : null
+    });
+  }
+});
+
+udpserver2.on("message", function (msg, rinfo) {
+  console.log("server got: " + msg.toString() + "(" + typeof(msg) + " from " +
+    rinfo.address + ":" + rinfo.port);
+  
+  var data = null;
+
+  try {
+    msg = msg.toString();
+    msg = msg.replace("\n", "");
+    data = msg.split(",");
+  } catch(err) {
+    console.log("msg error", err);
+    return;
+  }
+
+  if(data != null) {
+    io.sockets.emit('marker', {
+      latitude: parseFloat(data[0]), longitude: parseFloat(data[1]),
+      color: data[2], msg: data[3]
     });
   }
 });

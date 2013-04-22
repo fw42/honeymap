@@ -1,5 +1,5 @@
 /** config **/
-var markers_visible_max = 150;
+var markers_visible_max = 150000;
 var markersrc_color = { fill: 'red', stroke: 'darkred' };
 var markerdst_color = { fill: '#F8E23B', stroke: '#383F47' };
 
@@ -76,19 +76,19 @@ function remove_oldest_marker() {
   par.remove(); // Remove parent node too (jVectorMap does not do this by itself)
 }
 
-function add_marker_ll(lat, lng, type, eventname, region) {
+function add_marker_ll(lat, lng, color, type, eventname, region) {
   if(eventname == null) { eventname = "other"; }
   if(type == null) { type = 'src'; }
-  if(type == 'src') {
-    // only count src markers which are within a valid region
-    if(region == null) { region = get_regioncode_ll(lat, lng); }
-    if(region != null) {
-      if(regionhits[region] == null) { regionhits[region] = {}; regionhits_countonly[region] = 0; }
-      if(regionhits[region][eventname] == null) { regionhits[region][eventname] = 0; }
-      regionhits[region][eventname]++;
-      regionhits_countonly[region]++;
-    }
-  }
+  // if(type == 'src') {
+  //   // only count src markers which are within a valid region
+  //   if(region == null) { region = get_regioncode_ll(lat, lng); }
+  //   if(region != null) {
+  //     if(regionhits[region] == null) { regionhits[region] = {}; regionhits_countonly[region] = 0; }
+  //     if(regionhits[region][eventname] == null) { regionhits[region][eventname] = 0; }
+  //     regionhits[region][eventname]++;
+  //     regionhits_countonly[region]++;
+  //   }
+  // }
   var markerkey = lat + "," + lng;
   if(markerhits[markerkey] == null) { markerhits[markerkey] = {}; }
   if(markerhits[markerkey][eventname] == null) { markerhits[markerkey][eventname] = 0; }
@@ -99,16 +99,10 @@ function add_marker_ll(lat, lng, type, eventname, region) {
     if(markers_total >= markers_visible_max) {
       remove_oldest_marker();
     }
-    if(type == 'dst') {
       mapobj.addMarker(markerkey, {
        latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")",
-       style: markerdst_color
+       style: { fill: color, stroke: '#383F47' }
       }, []);
-    } else {
-      mapobj.addMarker(markerkey, {
-       latLng: [ lat, lng ], name: "(" + lat + ", " + lng + ")"
-      }, []);
-    }
     markers_total++;
   }
 }
