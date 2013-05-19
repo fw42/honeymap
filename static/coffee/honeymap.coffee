@@ -1,3 +1,11 @@
+###
+This file is part of HoneyMap (https://github.com/fw42/honeymap/),
+developed within the Honeynet Project (https://www.honeynet.org/),
+written by Florian Weingarten, Mark Schloesser, Johannes Gilger.
+
+See website for license and contact information.
+###
+
 class Honeymap
 
   constructor: (config) ->
@@ -6,7 +14,12 @@ class Honeymap
       region: {}
       marker: {}
 
+    @config = config
+    @markerCaptions = {}
+
     @mapElem = jQuery('#world-map')
+    @fitSize()
+
     @mapElem.vectorMap(
       backgroundColor: ''
       markerStyle:
@@ -24,35 +37,85 @@ class Honeymap
         ]
       onRegionLabelShow: (ev, label, code) =>
         label.html("<big>" + label.html() + "</big>")
-        label.append(event_count_summary(@hits.region[code]))
+        label.append(@eventCountSummary(@hits.region[code]))
       onMarkerLabelShow: (ev, label, code) =>
-        label.html(markercaptions[code])
-        label.append(event_count_summary(@hits.marker[code]))
+        label.html(@markerCaptions[code])
+        label.append(@eventCountSummary(@hits.marker[code]))
     )
 
     @mapObj = @mapElem.vectorMap('get', 'mapObject')
     @mapObj.regions['US'].config.name = "USA"
 
-    @fitSize()
-
   fitSize: ->
-    console.log("fitSize() called")
-    console.log(jQuery(document).width())
-    console.log(jQuery(document).height())
     @mapElem.width(jQuery(document).width() - 100)
     @mapElem.height(0.8 * jQuery(document).height())
 
-config =
-  markers_visible: 150
-  colors:
-    src: { fill: 'red',     stroke: 'darkred' }
-    dst: { fill: '#F8E23B', stroke: '#383F47' }
-    scale: [ '#FFFFFF', '#0071A4' ]
+  @eventCountSummary: (hits) ->
+    summary = ""
+    total = 0
 
-honeymap = new Honeymap(config)
+    for type, count of hits
+      if total == 0 then summary += "<hr/>"
+      summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>"
+      total += count
 
-resizeHandler = ->
-  console.log("resizeHandler() called")
-  honeymap.fitSize()
+    if total > 0 then summary += "<hr/><b>total</b>: " + total + " events"
+    return summary
 
-jQuery(window).resize(resizeHandler)
+  updateRegioncolors: ->
+    # Force recomputation of min and max for correct color scaling
+    @mapObj.series.regions[0].params.min = null
+    @mapObj.series.regions[0].params.max = null
+    # Update data
+    @mapObj.series.regions[0].setValues(regionhits_countonly)
+
+  removeOldestMarker: ->
+    # only remove src markers
+    toremove = jQuery(@mapElem.find("svg g circle.jvectormap-marker[fill=" + @config.colors.src.fill + "]")[0])
+
+    par = toremove.parent()
+    @mapObj.removeMarkers([ toremove.attr('data-index') ])
+
+    # Remove parent node too (jVectorMap does not do this by itself)
+    par.remove()
+
+  regionCode: (x, y) ->
+    efp = jQuery(document.elementFromPoint(x + @mapElem.offset().left, y + @mapElem.offset().top))
+    if efp.is('path')
+      return efp.attr('data-code')
+    else if efp.is('circle') || (efp.is('div') && efp.hasClass('marker_animation'))
+      # This is pretty ugly. If we hit an existing marker, make it invisible,
+      # recursively look again and then make it visible again.
+      efp.hide()
+      rc = @regionCode(x, y)
+      efp.show()
+      return rc
+    else
+      return null
+
+  incMarkerCount: (type, eventName, marker) ->
+    # only count src markers which are within a valid region
+    if type == 'src' and rc = marker.regionCode
+      @hits.region[rc] ||= {}
+      @hits.region[rc][eventName] ||= 0
+      @hits.region[rc][eventname]++
+
+    @hits.marker[marker.id] ||= {}
+    @hits.marker[marker.id][eventName] ||= 0
+    @hits.marker[marker.id][eventName]++
+
+  addMarker: (lat, lng, type, eventName, regionCode) ->
+    eventName ||= "other"
+    type ||= 'src'
+
+    marker = new Marker(this, lat, lang, type, regionCode)
+    marker.animate()
+
+    @incMarkerCount(type, eventName, marker)
+
+    # only add new markers to jVectorMap which do not exist yet
+    return unless @mapObj.markers[marker.id]
+
+    markers_total++
+    if markers_total >= markers_visible_max then remove_oldest_marker()
+    @mapObj.addMarker(marker.id, { latLng: marker.gps, name: marker.name, style: @config.colors[type] }, [])
