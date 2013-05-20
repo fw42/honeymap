@@ -1,14 +1,13 @@
 class Feed
-  constructor: (map, log) ->
+  constructor: (map, log, instance) ->
     @map = map
     @log = log
-    @socket = io.connect('/')
-    @socket.on("marker", @handler)
+    transport = new Transport(instance, @handler)
 
   handler: (data) =>
     lat = data.lat
     lng = data.lng
-    marker = new Marker(@map, lat, lng, "socketio_random")
+    marker = new Marker(@map, lat, lng, "random_remote")
     return unless marker.regionCode
     @map.addMarker(marker)
     @log.add "New event in " + marker.regionName() + " " + marker.name()

@@ -10,7 +10,7 @@ See website for license and contact information.
 
 
 (function() {
-  var Feed, Honeymap, Log, Marker, config,
+  var Feed, Honeymap, Log, Marker, Transport, config,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Honeymap = (function() {
@@ -220,7 +220,7 @@ See website for license and contact information.
     log.add("Note that this is not <b>all</b> honeypots of the Honeynet Project,");
     log.add("only those who voluntarily publish their captures to hpfeeds!");
     log.add("");
-    return new Feed(honeymap, log, 500);
+    return new Feed(honeymap, log, "geoloc.events");
   });
 
   Marker = (function() {
@@ -288,14 +288,26 @@ See website for license and contact information.
 
   })();
 
+  Transport = (function() {
+
+    function Transport(instance, handler) {
+      this.socket = io.connect('/');
+      this.socket.on(instance, handler);
+    }
+
+    return Transport;
+
+  })();
+
   Feed = (function() {
 
-    function Feed(map, log) {
+    function Feed(map, log, instance) {
       this.handler = __bind(this.handler, this);
+
+      var transport;
       this.map = map;
       this.log = log;
-      this.socket = io.connect('/');
-      this.socket.on("marker", this.handler);
+      transport = new Transport(instance, this.handler);
     }
 
     Feed.prototype.handler = function(data) {

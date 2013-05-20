@@ -8,7 +8,7 @@ class Feed
     while true
       lat = Math.random() * 180 - 90
       lng = Math.random() * 360 - 180
-      marker = new Marker(@map, lat, lng, "random")
+      marker = new Marker(@map, lat, lng, "random_local")
       break if marker.regionCode
     @map.addMarker(marker)
     @log.add "New event in " + marker.regionName() + " " + marker.name()

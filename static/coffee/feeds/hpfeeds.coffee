@@ -1,9 +1,8 @@
 class Feed
-  constructor: (map, log) ->
+  constructor: (map, log, instance) ->
     @map = map
     @log = log
-    @socket = io.connect('/');
-    @socket.on("marker", @handler)
+    transport = new Transport(instance, @handler)
 
   handler: (data) =>
     lat1 = data.latitude

@@ -18,4 +18,4 @@ jQuery(document).ready ->
   log.add "only those who voluntarily publish their captures to hpfeeds!"
   log.add ""
 
-  new Feed(honeymap, log)
+  new Feed(honeymap, log, "geoloc.events")
