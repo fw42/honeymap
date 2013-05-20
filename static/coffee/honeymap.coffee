@@ -7,19 +7,10 @@ See website for license and contact information.
 ###
 
 class Honeymap
-
   constructor: (config) ->
-
     @config = config
-
-    @hits =
-      region: {}
-      regionCount: {}
-      marker: {}
-    @markers =
-      captions: {}
-      count: 0
-
+    @hits = { region: { total: {} }, marker: { total: 0 } }
+    @captions = {}
     @mapElem = jQuery('#world-map')
     @fitSize()
     @mapElem.vectorMap(
@@ -35,16 +26,15 @@ class Honeymap
           scale: config.colors.scale
           attribute: 'fill'
           normalizeFunction: 'linear'
-          values: @hits.region
+          values: {}
         ]
       onRegionLabelShow: (ev, label, code) =>
         label.html("<big>" + label.html() + "</big>")
         label.append(Honeymap.eventCountSummary(@hits.region[code]))
       onMarkerLabelShow: (ev, label, code) =>
-        label.html(@markerCaptions[code])
+        label.html(@captions[code])
         label.append(Honeymap.eventCountSummary(@hits.marker[code]))
     )
-
     @mapObj = @mapElem.vectorMap('get', 'mapObject')
     @mapObj.regions['US'].config.name = "USA"
 
@@ -57,15 +47,15 @@ class Honeymap
     @mapObj.series.regions[0].params.min = null
     @mapObj.series.regions[0].params.max = null
     # Update data
-    @mapObj.series.regions[0].setValues(@hits.regionCount)
+    @mapObj.series.regions[0].setValues(@hits.region["total"])
 
   removeOldestMarker: ->
     # only remove src markers
     toremove = jQuery(@mapElem.find("svg g circle.jvectormap-marker[fill=" + @config.colors.src.fill + "]")[0])
-
     par = toremove.parent()
-    @mapObj.removeMarkers([ toremove.attr('data-index') ])
-
+    id = toremove.attr('data-index')
+    delete(@captions[id])
+    @mapObj.removeMarkers([ id ])
     # Remove parent node too (jVectorMap does not do this by itself)
     par.remove()
 
@@ -84,36 +74,36 @@ class Honeymap
       return null
 
   incMarkerCount: (marker) ->
+    @hits.marker[marker.id()] ||= {}
+    @hits.marker[marker.id()][marker.eventName] ||= 0
+    @hits.marker[marker.id()][marker.eventName]++
     # only count src markers which are within a valid region
-    if marker.type == 'src' and rc = marker.regionCode
-      @hits.region[rc] ||= {}
-      @hits.region[rc][marker.eventName] ||= 0
-      @hits.region[rc][marker.eventname]++
-
-    @hits.marker[marker.id] ||= {}
-    @hits.marker[marker.id][marker.eventName] ||= 0
-    @hits.marker[marker.id][marker.eventName]++
+    return unless marker.type == 'src' and rc = marker.regionCode
+    @hits.region[rc] ||= {}
+    @hits.region[rc][marker.eventName] ||= 0
+    @hits.region[rc][marker.eventName]++
+    @hits.region["total"][rc] ||= 0
+    @hits.region["total"][rc]++
 
   addMarker: (marker) ->
     marker.animate()
-    @updateRegionColors()
+    @captions[marker.id()] = marker.caption()
     @incMarkerCount(marker)
+    @updateRegionColors()
 
-    # only add new markers to jVectorMap which do not exist yet
-    return unless @mapObj.markers[marker.id]
+    # only add new markers div's to jVectorMap which do not exist yet
+    if @mapObj.markers[marker.id()]
+      console.log(marker.id() + " already exists")
+      return
 
-    @markers.count++
-    if @markers.count >= config.markersMaxVisible then @removeOldestMarker()
-    @mapObj.addMarker(marker.id(), { latLng: marker.gps(), name: marker.name, style: @config.colors[marker.type] }, [])
+    @hits.marker["total"]++
+    if @hits.marker["total"] > config.markersMaxVisible then @removeOldestMarker()
+    @mapObj.addMarker(marker.id(), { latLng: marker.gps(), name: marker.name(), style: @config.colors[marker.type] }, [])
 
   @eventCountSummary: (hits) ->
-    summary = ""
+    return unless hits?
     total = 0
-
+    summary = "<hr/>"
     for type, count of hits
-      if total == 0 then summary += "<hr/>"
-      summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>"
-      total += count
-
-    if total > 0 then summary += "<hr/><b>total</b>: " + total + " events"
-    return summary
+      summary += "<b>" + type + "</b>: " + (total += (count ||= 0)) + "<br/>"
+    summary + "<hr/><b>total</b>: " + total + " events"

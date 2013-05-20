@@ -1,7 +1,7 @@
 class Log
   constructor: (config) ->
     @elem = jQuery("#log")
-    @max = config.markers_visible
+    @max = config.markersMaxVisible
     @fitSize()
 
   fitSize: ->
@@ -11,8 +11,9 @@ class Log
 
   clearOld: ->
     entries = @elem.find("div.log_entry")
-    if entries.length > @max
-      entries.slice(0, entries.length - 1 - @max).remove()
+    if entries.length >= @max
+      console.log("clearing")
+      entries.slice(0, entries.length/2).remove()
       @elem.find("br").nextUntil('div.log_entry', 'br').remove()
 
   add: (msg) ->

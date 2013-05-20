@@ -1,5 +1,4 @@
 class Marker
-
   constructor: (map, lat, lng, type, eventName, regionCode, cityName) ->
     @map = map
     @lat = lat
@@ -24,17 +23,12 @@ class Marker
       )
     )
 
-  id: ->
-    @lat + "," + @lng
+  caption: ->
+    caption  = "<small>(" + @lat + ", " + @lng + ")</small><br/>"
+    caption += "<big>" + @cityName + "</big> (" + @regionCode + ")" if @cityName
+    return caption
 
-  name: ->
-    "(" + @lat + ", " + @lng + ")"
-
-  gps: ->
-    [ @lat, @lng ]
-
-  regionName: ->
-    @map.mapObj.getRegionName(@regionCode) if @regionCode
-
-  setCaption: (caption) ->
-    @map.markerCaptions[@id()] = caption
+  id: -> @lat + "," + @lng
+  name: -> "(" + @lat + ", " + @lng + ")"
+  gps: -> [ @lat, @lng ]
+  regionName: -> @map.mapObj.getRegionName(@regionCode) if @regionCode

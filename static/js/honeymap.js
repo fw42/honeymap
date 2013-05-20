@@ -19,14 +19,14 @@ See website for license and contact information.
       var _this = this;
       this.config = config;
       this.hits = {
-        region: {},
-        regionCount: {},
-        marker: {}
+        region: {
+          total: {}
+        },
+        marker: {
+          total: 0
+        }
       };
-      this.markers = {
-        captions: {},
-        count: 0
-      };
+      this.captions = {};
       this.mapElem = jQuery('#world-map');
       this.fitSize();
       this.mapElem.vectorMap({
@@ -45,7 +45,7 @@ See website for license and contact information.
               scale: config.colors.scale,
               attribute: 'fill',
               normalizeFunction: 'linear',
-              values: this.hits.region
+              values: {}
             }
           ]
         },
@@ -54,7 +54,7 @@ See website for license and contact information.
           return label.append(Honeymap.eventCountSummary(_this.hits.region[code]));
         },
         onMarkerLabelShow: function(ev, label, code) {
-          label.html(_this.markerCaptions[code]);
+          label.html(_this.captions[code]);
           return label.append(Honeymap.eventCountSummary(_this.hits.marker[code]));
         }
       });
@@ -70,14 +70,16 @@ See website for license and contact information.
     Honeymap.prototype.updateRegionColors = function() {
       this.mapObj.series.regions[0].params.min = null;
       this.mapObj.series.regions[0].params.max = null;
-      return this.mapObj.series.regions[0].setValues(this.hits.regionCount);
+      return this.mapObj.series.regions[0].setValues(this.hits.region["total"]);
     };
 
     Honeymap.prototype.removeOldestMarker = function() {
-      var par, toremove;
+      var id, par, toremove;
       toremove = jQuery(this.mapElem.find("svg g circle.jvectormap-marker[fill=" + this.config.colors.src.fill + "]")[0]);
       par = toremove.parent();
-      this.mapObj.removeMarkers([toremove.attr('data-index')]);
+      id = toremove.attr('data-index');
+      delete this.captions[id];
+      this.mapObj.removeMarkers([id]);
       return par.remove();
     };
 
@@ -97,51 +99,52 @@ See website for license and contact information.
     };
 
     Honeymap.prototype.incMarkerCount = function(marker) {
-      var rc, _base, _base1, _base2, _base3, _name, _name1, _name2;
-      if (marker.type === 'src' && (rc = marker.regionCode)) {
-        (_base = this.hits.region)[rc] || (_base[rc] = {});
-        (_base1 = this.hits.region[rc])[_name = marker.eventName] || (_base1[_name] = 0);
-        this.hits.region[rc][marker.eventname]++;
+      var rc, _base, _base1, _base2, _base3, _base4, _name, _name1, _name2;
+      (_base = this.hits.marker)[_name = marker.id()] || (_base[_name] = {});
+      (_base1 = this.hits.marker[marker.id()])[_name1 = marker.eventName] || (_base1[_name1] = 0);
+      this.hits.marker[marker.id()][marker.eventName]++;
+      if (!(marker.type === 'src' && (rc = marker.regionCode))) {
+        return;
       }
-      (_base2 = this.hits.marker)[_name1 = marker.id] || (_base2[_name1] = {});
-      (_base3 = this.hits.marker[marker.id])[_name2 = marker.eventName] || (_base3[_name2] = 0);
-      return this.hits.marker[marker.id][marker.eventName]++;
+      (_base2 = this.hits.region)[rc] || (_base2[rc] = {});
+      (_base3 = this.hits.region[rc])[_name2 = marker.eventName] || (_base3[_name2] = 0);
+      this.hits.region[rc][marker.eventName]++;
+      (_base4 = this.hits.region["total"])[rc] || (_base4[rc] = 0);
+      return this.hits.region["total"][rc]++;
     };
 
     Honeymap.prototype.addMarker = function(marker) {
       marker.animate();
-      this.updateRegionColors();
+      this.captions[marker.id()] = marker.caption();
       this.incMarkerCount(marker);
-      if (!this.mapObj.markers[marker.id]) {
+      this.updateRegionColors();
+      if (this.mapObj.markers[marker.id()]) {
+        console.log(marker.id() + " already exists");
         return;
       }
-      this.markers.count++;
-      if (this.markers.count >= config.markersMaxVisible) {
+      this.hits.marker["total"]++;
+      if (this.hits.marker["total"] > config.markersMaxVisible) {
         this.removeOldestMarker();
       }
       return this.mapObj.addMarker(marker.id(), {
         latLng: marker.gps(),
-        name: marker.name,
+        name: marker.name(),
         style: this.config.colors[marker.type]
       }, []);
     };
 
     Honeymap.eventCountSummary = function(hits) {
       var count, summary, total, type;
-      summary = "";
+      if (hits == null) {
+        return;
+      }
       total = 0;
+      summary = "<hr/>";
       for (type in hits) {
         count = hits[type];
-        if (total === 0) {
-          summary += "<hr/>";
-        }
-        summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>";
-        total += count;
+        summary += "<b>" + type + "</b>: " + (total += (count || (count = 0))) + "<br/>";
       }
-      if (total > 0) {
-        summary += "<hr/><b>total</b>: " + total + " events";
-      }
-      return summary;
+      return summary + "<hr/><b>total</b>: " + total + " events";
     };
 
     return Honeymap;
@@ -178,6 +181,15 @@ See website for license and contact information.
       }));
     };
 
+    Marker.prototype.caption = function() {
+      var caption;
+      caption = "<small>(" + this.lat + ", " + this.lng + ")</small><br/>";
+      if (this.cityName) {
+        caption += "<big>" + this.cityName + "</big> (" + this.regionCode + ")";
+      }
+      return caption;
+    };
+
     Marker.prototype.id = function() {
       return this.lat + "," + this.lng;
     };
@@ -196,10 +208,6 @@ See website for license and contact information.
       }
     };
 
-    Marker.prototype.setCaption = function(caption) {
-      return this.map.markerCaptions[this.id()] = caption;
-    };
-
     return Marker;
 
   })();
@@ -208,7 +216,7 @@ See website for license and contact information.
 
     function Log(config) {
       this.elem = jQuery("#log");
-      this.max = config.markers_visible;
+      this.max = config.markersMaxVisible;
       this.fitSize();
     }
 
@@ -221,8 +229,9 @@ See website for license and contact information.
     Log.prototype.clearOld = function() {
       var entries;
       entries = this.elem.find("div.log_entry");
-      if (entries.length > this.max) {
-        entries.slice(0, entries.length - 1 - this.max).remove();
+      if (entries.length >= this.max) {
+        console.log("clearing");
+        entries.slice(0, entries.length / 2).remove();
         return this.elem.find("br").nextUntil('div.log_entry', 'br').remove();
       }
     };
