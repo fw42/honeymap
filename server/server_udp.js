@@ -36,18 +36,12 @@ udpserver.bind(41234);
 function handler (req, res) {
   try {
     console.log('New request: ' + req.connection.remoteAddress + ': ' + url.parse(req.url).href);
-    req.addListener('end', function() {
-      file.serve(req, res, function(err, result) {
-        if (err) {
-          console.error('Error serving %s: %s', req.url, err.message);
-          if (err.status === 404 || err.status === 500) {
-            file.serveFile(util.format('/%d.html', err.status), err.status, {}, req, res);
-          } else {
-            res.writeHead(err.status, err.headers);
-            res.end();
-          }
-        }
-      });
+    file.serve(req, res, function(err, result) {
+      if (err) {
+        console.error('Error serving %s: %s', req.url, err.message);
+        res.writeHead(err.status, err.headers);
+        res.end();
+      }
     });
   } catch(err) {
     sys.puts(err);
@@ -59,7 +53,7 @@ function handler (req, res) {
 udpserver.on("message", function (msg, rinfo) {
   console.log("server got: " + msg.toString() + "(" + typeof(msg) + " from " +
     rinfo.address + ":" + rinfo.port);
-  
+
   try {
     msg = msg.toString();
     msg = msg.replace("\n", "");
@@ -82,7 +76,7 @@ udpserver.on("message", function (msg, rinfo) {
 
       // latitude2: data.latitude2, longitude2: data.longitude2,
       // countrycode2: data.countrycode2, country2: data.country2, city2: data.city2,
- 
+
       // type: data.type ? sanitize(data.type).xss() : null,
       // md5: data.md5 ? sanitize(data.md5).xss() : null
     });

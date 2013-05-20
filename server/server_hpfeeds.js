@@ -6,7 +6,7 @@ var util = require('util');
 var ns = require('node-static');
 var io = require('socket.io').listen(app);
 var hpfeeds = require('hpfeeds');
-var file = new(ns.Server)("../static/", { cache: 600 });
+var file = new(ns.Server)("../static", { cache: 600 });
 var sanitize = require('validator').sanitize;
 
 eval(fs.readFileSync('server_hpfeeds_config.js').toString());
@@ -21,7 +21,7 @@ io.enable('browser client etag');          // apply etag caching logic based on 
 io.enable('browser client gzip');          // gzip the file
 io.set('log level', 1);                    // reduce logging
 
-// hp feed
+// hpfeeds
 var feedconn = new hpfeeds.HPC(
   config.hpfeeds.server,
   config.hpfeeds.port,
@@ -34,18 +34,12 @@ feedconn.onready(function() { feedconn.subscribe('geoloc.events'); });
 function handler (req, res) {
   try {
     console.log('New request: ' + req.connection.remoteAddress + ': ' + url.parse(req.url).href);
-    req.addListener('end', function() {
-      file.serve(req, res, function(err, result) {
-        if (err) {
-          console.error('Error serving %s: %s', req.url, err.message);
-          if (err.status === 404 || err.status === 500) {
-            file.serveFile(util.format('/errors/%d.html', err.status), err.status, {}, req, res);
-          } else {
-            res.writeHead(err.status, err.headers);
-            res.end();
-          }
-        }
-      });
+    file.serve(req, res, function(err, result) {
+      if (err) {
+        console.error('Error serving %s: %s', req.url, err.message);
+        res.writeHead(err.status, err.headers);
+        res.end();
+      }
     });
   } catch(err) {
     sys.puts(err);
@@ -63,7 +57,7 @@ feedconn.msgcb = function(id, chan, data) {
 
       latitude2: data.latitude2, longitude2: data.longitude2,
       countrycode2: data.countrycode2, country2: data.country2, city2: data.city2,
- 
+
       type: data.type ? sanitize(data.type).xss() : null,
       md5: data.md5 ? sanitize(data.md5).xss() : null
     });

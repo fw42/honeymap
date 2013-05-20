@@ -3,7 +3,7 @@ var config = {
   uid: 1000,
   hpfeeds: {
     server: 'hpfeeds.honeycloud.net',
-    port: 10000,
+    port: 20000,
     ident: 'MyUsername',
     auth: 'MyPassword'
   }
