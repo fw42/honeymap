@@ -12,7 +12,7 @@ It is written in [CoffeeScript](http://coffeescript.org/) and makes use of
 [socket.io](http://socket.io/) (HTML5 websockets), [jVectorMap](http://jvectormap.com/)
 and [jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
 
-Tested with node.js v0.8.9 and socket.io v0.9.10.
+Tested with node.js v0.10.7 and socket.io v0.9.14.
 
 Example
 -------
@@ -37,3 +37,14 @@ Authors
 Forks
 -----
 * [German Telecom (DTAG) Sicherheitstacho](http://www.sicherheitstacho.eu/)
+
+Setup
+-----
+* Install node.js (tested with [0.10.7](http://nodejs.org/dist/v0.10.7/node-v0.10.7.tar.gz))
+* Go to ```server/```
+* ```npm install node-static@0.6.9```
+* ```npm install socket.io@0.9.14```
+* ```npm install validator@1.1.1```
+* Copy ```server_hpfeeds_config.js.example``` to ```server_hpfeeds_config.js``` and fill in
+  your [hpfriends](http://hpfriends.honeycloud.net) credentials.
+* ```node server_hpfeeds```
