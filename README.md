@@ -2,14 +2,15 @@ HoneyMap
 ========
 
 HoneyMap is a web application which visualizes a live stream of
-GPS locations on a SVG world map.
-In principle, it can be used with any stream of GPS data. For our application,
-we use honeypot captures, provided by several [hpfeeds](https://github.com/rep/hpfeeds)
+GPS locations on a SVG world map. In principle, it can be used
+with any stream of GPS data. For our application, we use honeypot
+captures, provided by several [hpfeeds](https://github.com/rep/hpfeeds)
 from the [Honeynet Project](http://www.honeynet.org/).
 
-It makes use of [jQuery](http://jquery.com/), [node.js](http://nodejs.org/),
-[socket.io](http://socket.io/) (HTML5 websockets), [jVectorMap](http://jvectormap.com/) and
-[jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
+It is written in [CoffeeScript](http://coffeescript.org/) and makes use of
+[jQuery](http://jquery.com/), [node.js](http://nodejs.org/),
+[socket.io](http://socket.io/) (HTML5 websockets), [jVectorMap](http://jvectormap.com/)
+and [jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
 
 Tested with node.js v0.8.9 and socket.io v0.9.10.
 
