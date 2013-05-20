@@ -73,6 +73,9 @@ class Honeymap
     else
       return null
 
+  regionName: (regionCode) ->
+    @mapObj.getRegionName(regionCode)
+
   incMarkerCount: (marker) ->
     @hits.marker[marker.id()] ||= {}
     @hits.marker[marker.id()][marker.eventName] ||= 0
@@ -90,12 +93,8 @@ class Honeymap
     @captions[marker.id()] = marker.caption()
     @incMarkerCount(marker)
     @updateRegionColors()
-
     # only add new markers div's to jVectorMap which do not exist yet
-    if @mapObj.markers[marker.id()]
-      console.log(marker.id() + " already exists")
-      return
-
+    return if @mapObj.markers[marker.id()]
     @hits.marker["total"]++
     if @hits.marker["total"] > config.markersMaxVisible then @removeOldestMarker()
     @mapObj.addMarker(marker.id(), { latLng: marker.gps(), name: marker.name(), style: @config.colors[marker.type] }, [])
@@ -105,5 +104,7 @@ class Honeymap
     total = 0
     summary = "<hr/>"
     for type, count of hits
-      summary += "<b>" + type + "</b>: " + (total += (count ||= 0)) + "<br/>"
+      count ||= 0
+      summary += "<b>#{type}</b>: #{count}<br/>"
+      total += count
     summary + "<hr/><b>total</b>: " + total + " events"

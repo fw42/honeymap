@@ -16,6 +16,6 @@ jQuery(document).ready ->
   log.add "<b>Welcome to HoneyMap. This is a BETA version! Bug reports welcome :-)</b>"
   log.add "Note that this is not <b>all</b> honeypots of the Honeynet Project,"
   log.add "only those who voluntarily publish their captures to hpfeeds!"
-  log.add "<br/>"
+  log.add ""
 
   new Feed(honeymap, log, 500)

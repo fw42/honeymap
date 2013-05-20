@@ -98,6 +98,10 @@ See website for license and contact information.
       }
     };
 
+    Honeymap.prototype.regionName = function(regionCode) {
+      return this.mapObj.getRegionName(regionCode);
+    };
+
     Honeymap.prototype.incMarkerCount = function(marker) {
       var rc, _base, _base1, _base2, _base3, _base4, _name, _name1, _name2;
       (_base = this.hits.marker)[_name = marker.id()] || (_base[_name] = {});
@@ -119,7 +123,6 @@ See website for license and contact information.
       this.incMarkerCount(marker);
       this.updateRegionColors();
       if (this.mapObj.markers[marker.id()]) {
-        console.log(marker.id() + " already exists");
         return;
       }
       this.hits.marker["total"]++;
@@ -142,73 +145,14 @@ See website for license and contact information.
       summary = "<hr/>";
       for (type in hits) {
         count = hits[type];
-        summary += "<b>" + type + "</b>: " + (total += (count || (count = 0))) + "<br/>";
+        count || (count = 0);
+        summary += "<b>" + type + "</b>: " + count + "<br/>";
+        total += count;
       }
       return summary + "<hr/><b>total</b>: " + total + " events";
     };
 
     return Honeymap;
-
-  })();
-
-  Marker = (function() {
-
-    function Marker(map, lat, lng, type, eventName, regionCode, cityName) {
-      var point;
-      this.map = map;
-      this.lat = lat;
-      this.lng = lng;
-      this.type = type || "src";
-      this.eventName = eventName || "other";
-      point = this.map.mapObj.latLngToPoint(this.lat, this.lng);
-      this.x = point.x;
-      this.y = point.y;
-      this.regionCode = regionCode || this.map.regionCode(this.x, this.y);
-      this.cityName = cityName;
-    }
-
-    Marker.prototype.animate = function() {
-      var cssClass;
-      cssClass = this.type === 'dst' ? 'markerdst' : 'markersrc';
-      return this.map.mapElem.append(jQuery('<div class="marker_animation ' + cssClass + '"></div>').css('left', this.x + 'px').css('top', this.y + 'px').css({
-        opacity: 1,
-        scale: 0
-      }).transition({
-        opacity: 0,
-        scale: 1
-      }, 1000, 'linear', function() {
-        return jQuery(this).remove();
-      }));
-    };
-
-    Marker.prototype.caption = function() {
-      var caption;
-      caption = "<small>(" + this.lat + ", " + this.lng + ")</small><br/>";
-      if (this.cityName) {
-        caption += "<big>" + this.cityName + "</big> (" + this.regionCode + ")";
-      }
-      return caption;
-    };
-
-    Marker.prototype.id = function() {
-      return this.lat + "," + this.lng;
-    };
-
-    Marker.prototype.name = function() {
-      return "(" + this.lat + ", " + this.lng + ")";
-    };
-
-    Marker.prototype.gps = function() {
-      return [this.lat, this.lng];
-    };
-
-    Marker.prototype.regionName = function() {
-      if (this.regionCode) {
-        return this.map.mapObj.getRegionName(this.regionCode);
-      }
-    };
-
-    return Marker;
 
   })();
 
@@ -221,7 +165,7 @@ See website for license and contact information.
     }
 
     Log.prototype.fitSize = function() {
-      this.elem.width(0.5 * jQuery(document).width());
+      this.elem.width(0.6 * jQuery(document).width());
       this.elem.css("margin-top", 0.03 * jQuery(document).height());
       return this.elem.height(0.15 * jQuery(document).height());
     };
@@ -230,7 +174,6 @@ See website for license and contact information.
       var entries;
       entries = this.elem.find("div.log_entry");
       if (entries.length >= this.max) {
-        console.log("clearing");
         entries.slice(0, entries.length / 2).remove();
         return this.elem.find("br").nextUntil('div.log_entry', 'br').remove();
       }
@@ -276,35 +219,126 @@ See website for license and contact information.
     log.add("<b>Welcome to HoneyMap. This is a BETA version! Bug reports welcome :-)</b>");
     log.add("Note that this is not <b>all</b> honeypots of the Honeynet Project,");
     log.add("only those who voluntarily publish their captures to hpfeeds!");
-    log.add("<br/>");
+    log.add("");
     return new Feed(honeymap, log, 500);
   });
 
-  Feed = (function() {
+  Marker = (function() {
 
-    function Feed(map, log, pause) {
-      this.randomPoint = __bind(this.randomPoint, this);
-
-      var _this = this;
+    function Marker(map, lat, lng, eventName, type, regionCode, cityName) {
+      var point;
       this.map = map;
-      this.log = log;
-      window.setInterval((function() {
-        return window.setTimeout(_this.randomPoint, Math.random() * pause);
-      }), 2 * pause);
+      this.lat = lat;
+      this.lng = lng;
+      this.type = type || "src";
+      this.eventName = eventName || "other";
+      point = this.map.mapObj.latLngToPoint(this.lat, this.lng);
+      this.x = point.x;
+      this.y = point.y;
+      this.regionCode = regionCode || this.map.regionCode(this.x, this.y);
+      this.cityName = cityName;
     }
 
-    Feed.prototype.randomPoint = function() {
-      var lat, lng, marker;
-      while (true) {
-        lat = Math.random() * 180 - 90;
-        lng = Math.random() * 360 - 180;
-        marker = new Marker(this.map, lat, lng);
-        if (marker.regionCode) {
-          break;
+    Marker.prototype.animate = function() {
+      var cssClass;
+      cssClass = this.type === 'dst' ? 'markerdst' : 'markersrc';
+      return this.map.mapElem.append(jQuery('<div class="marker_animation ' + cssClass + '"></div>').css('left', this.x + 'px').css('top', this.y + 'px').css({
+        opacity: 1,
+        scale: 0
+      }).transition({
+        opacity: 0,
+        scale: 1
+      }, 1000, 'linear', function() {
+        return jQuery(this).remove();
+      }));
+    };
+
+    Marker.prototype.caption = function() {
+      var caption;
+      caption = "<small>(" + this.lat + ", " + this.lng + ")</small><br/>";
+      if (this.cityName) {
+        caption += "<big>" + this.cityName + "</big> (" + this.regionCode + ")";
+      }
+      return caption;
+    };
+
+    Marker.prototype.id = function() {
+      return this.lat + "," + this.lng;
+    };
+
+    Marker.prototype.name = function() {
+      return "(" + this.lat.toFixed(2) + ", " + this.lng.toFixed(2) + ")";
+    };
+
+    Marker.prototype.gps = function() {
+      return [this.lat, this.lng];
+    };
+
+    Marker.prototype.regionName = function() {
+      if (this.regionCode) {
+        return this.map.regionName(this.regionCode);
+      }
+    };
+
+    Marker.prototype.location = function() {
+      return (this.cityName ? this.cityName + ", " : "") + this.regionName();
+    };
+
+    return Marker;
+
+  })();
+
+  Feed = (function() {
+
+    function Feed(map, log) {
+      this.handler = __bind(this.handler, this);
+      this.map = map;
+      this.log = log;
+      this.socket = io.connect('/');
+      this.socket.on("marker", this.handler);
+    }
+
+    Feed.prototype.handler = function(data) {
+      var dst, lat1, lat2, lng1, lng2, src;
+      lat1 = data.latitude;
+      lng1 = data.longitude;
+      if (!(lat1 && lng1)) {
+        return;
+      }
+      src = new Marker(this.map, lat1, lng1, data.type, "src", data.countrycode, data.city);
+      if (src.x === 0 && src.y === 0) {
+        return;
+      }
+      lat2 = data.latitude2;
+      lng2 = data.longitude2;
+      if (lat2 && lng2) {
+        dst = new Marker(this.map, lat2, lng2, data.type, "dst", data.countrycode2, data.city2);
+        if (dst.x === 0 && dst.y === 0) {
+          dst = null;
         }
       }
-      this.map.addMarker(marker);
-      return this.log.add("New event in " + marker.regionName() + " (" + lat.toFixed(2) + ", " + lng.toFixed(2) + ")");
+      this.addLog(src, dst, data.md5);
+      this.map.addMarker(src);
+      if (dst) {
+        return this.map.addMarker(dst);
+      }
+    };
+
+    Feed.prototype.addLog = function(src, dst, md5) {
+      var attacktype, logstr, timestamp;
+      if (!src.regionName()) {
+        return;
+      }
+      timestamp = new Date().toTimeString().substring(0, 8);
+      attacktype = src.eventName === "thug.events" ? "scan" : "attack";
+      logstr = "<div class=\"log_timestamp\">" + timestamp + "</div> \n<div class=\"log_bracket\">&lt;</div>" + src.eventName + "<div class=\"log_bracket\">&gt;</div> \nNew " + attacktype + " from <div class=\"log_country\">" + (src.location()) + "</div> \n<small>" + (src.name()) + "</small>";
+      if (dst && dst.regionName()) {
+        logstr += " to <div class=\"log_country\">" + (dst.location()) + "</div> <small>" + (dst.name()) + "</small>";
+      }
+      if (md5) {
+        logstr += " <div class=\"log_bracket2\">[</div>" + ("<div class=\"log_info\"><a href=\"http://www.virustotal.com/search/?query=" + md5 + "\">" + (md5.substr(0, 9)) + "</a></div>") + "<div class=\"log_bracket2\">]</div>";
+      }
+      return this.log.add(logstr);
     };
 
     return Feed;

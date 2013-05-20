@@ -1,5 +1,5 @@
 class Marker
-  constructor: (map, lat, lng, type, eventName, regionCode, cityName) ->
+  constructor: (map, lat, lng, eventName, type, regionCode, cityName) ->
     @map = map
     @lat = lat
     @lng = lng
@@ -29,6 +29,7 @@ class Marker
     return caption
 
   id: -> @lat + "," + @lng
-  name: -> "(" + @lat + ", " + @lng + ")"
+  name: -> "(" + @lat.toFixed(2) + ", " + @lng.toFixed(2) + ")"
   gps: -> [ @lat, @lng ]
-  regionName: -> @map.mapObj.getRegionName(@regionCode) if @regionCode
+  regionName: -> @map.regionName(@regionCode) if @regionCode
+  location: -> (if @cityName then @cityName + ", " else "") + @regionName()

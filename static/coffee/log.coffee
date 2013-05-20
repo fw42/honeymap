@@ -5,14 +5,13 @@ class Log
     @fitSize()
 
   fitSize: ->
-    @elem.width(0.5 * jQuery(document).width())
+    @elem.width(0.6 * jQuery(document).width())
     @elem.css("margin-top", 0.03 * jQuery(document).height())
     @elem.height(0.15 * jQuery(document).height())
 
   clearOld: ->
     entries = @elem.find("div.log_entry")
     if entries.length >= @max
-      console.log("clearing")
       entries.slice(0, entries.length/2).remove()
       @elem.find("br").nextUntil('div.log_entry', 'br').remove()
 
