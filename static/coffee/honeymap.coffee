@@ -10,16 +10,18 @@ class Honeymap
 
   constructor: (config) ->
 
+    @config = config
+
     @hits =
       region: {}
+      regionCount: {}
       marker: {}
-
-    @config = config
-    @markerCaptions = {}
+    @markers =
+      captions: {}
+      count: 0
 
     @mapElem = jQuery('#world-map')
     @fitSize()
-
     @mapElem.vectorMap(
       backgroundColor: ''
       markerStyle:
@@ -37,10 +39,10 @@ class Honeymap
         ]
       onRegionLabelShow: (ev, label, code) =>
         label.html("<big>" + label.html() + "</big>")
-        label.append(@eventCountSummary(@hits.region[code]))
+        label.append(Honeymap.eventCountSummary(@hits.region[code]))
       onMarkerLabelShow: (ev, label, code) =>
         label.html(@markerCaptions[code])
-        label.append(@eventCountSummary(@hits.marker[code]))
+        label.append(Honeymap.eventCountSummary(@hits.marker[code]))
     )
 
     @mapObj = @mapElem.vectorMap('get', 'mapObject')
@@ -50,24 +52,12 @@ class Honeymap
     @mapElem.width(jQuery(document).width() - 100)
     @mapElem.height(0.8 * jQuery(document).height())
 
-  @eventCountSummary: (hits) ->
-    summary = ""
-    total = 0
-
-    for type, count of hits
-      if total == 0 then summary += "<hr/>"
-      summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>"
-      total += count
-
-    if total > 0 then summary += "<hr/><b>total</b>: " + total + " events"
-    return summary
-
-  updateRegioncolors: ->
+  updateRegionColors: ->
     # Force recomputation of min and max for correct color scaling
     @mapObj.series.regions[0].params.min = null
     @mapObj.series.regions[0].params.max = null
     # Update data
-    @mapObj.series.regions[0].setValues(regionhits_countonly)
+    @mapObj.series.regions[0].setValues(@hits.regionCount)
 
   removeOldestMarker: ->
     # only remove src markers
@@ -93,29 +83,37 @@ class Honeymap
     else
       return null
 
-  incMarkerCount: (type, eventName, marker) ->
+  incMarkerCount: (marker) ->
     # only count src markers which are within a valid region
-    if type == 'src' and rc = marker.regionCode
+    if marker.type == 'src' and rc = marker.regionCode
       @hits.region[rc] ||= {}
-      @hits.region[rc][eventName] ||= 0
-      @hits.region[rc][eventname]++
+      @hits.region[rc][marker.eventName] ||= 0
+      @hits.region[rc][marker.eventname]++
 
     @hits.marker[marker.id] ||= {}
-    @hits.marker[marker.id][eventName] ||= 0
-    @hits.marker[marker.id][eventName]++
+    @hits.marker[marker.id][marker.eventName] ||= 0
+    @hits.marker[marker.id][marker.eventName]++
 
-  addMarker: (lat, lng, type, eventName, regionCode) ->
-    eventName ||= "other"
-    type ||= 'src'
-
-    marker = new Marker(this, lat, lang, type, regionCode)
+  addMarker: (marker) ->
     marker.animate()
-
-    @incMarkerCount(type, eventName, marker)
+    @updateRegionColors()
+    @incMarkerCount(marker)
 
     # only add new markers to jVectorMap which do not exist yet
     return unless @mapObj.markers[marker.id]
 
-    markers_total++
-    if markers_total >= markers_visible_max then remove_oldest_marker()
-    @mapObj.addMarker(marker.id, { latLng: marker.gps, name: marker.name, style: @config.colors[type] }, [])
+    @markers.count++
+    if @markers.count >= config.markersMaxVisible then @removeOldestMarker()
+    @mapObj.addMarker(marker.id(), { latLng: marker.gps(), name: marker.name, style: @config.colors[marker.type] }, [])
+
+  @eventCountSummary: (hits) ->
+    summary = ""
+    total = 0
+
+    for type, count of hits
+      if total == 0 then summary += "<hr/>"
+      summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>"
+      total += count
+
+    if total > 0 then summary += "<hr/><b>total</b>: " + total + " events"
+    return summary

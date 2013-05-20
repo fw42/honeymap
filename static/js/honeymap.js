@@ -10,18 +10,23 @@ See website for license and contact information.
 
 
 (function() {
-  var Honeymap, Log, Marker, config;
+  var Feed, Honeymap, Log, Marker, config,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   Honeymap = (function() {
 
     function Honeymap(config) {
       var _this = this;
+      this.config = config;
       this.hits = {
         region: {},
+        regionCount: {},
         marker: {}
       };
-      this.config = config;
-      this.markerCaptions = {};
+      this.markers = {
+        captions: {},
+        count: 0
+      };
       this.mapElem = jQuery('#world-map');
       this.fitSize();
       this.mapElem.vectorMap({
@@ -46,11 +51,11 @@ See website for license and contact information.
         },
         onRegionLabelShow: function(ev, label, code) {
           label.html("<big>" + label.html() + "</big>");
-          return label.append(_this.eventCountSummary(_this.hits.region[code]));
+          return label.append(Honeymap.eventCountSummary(_this.hits.region[code]));
         },
         onMarkerLabelShow: function(ev, label, code) {
           label.html(_this.markerCaptions[code]);
-          return label.append(_this.eventCountSummary(_this.hits.marker[code]));
+          return label.append(Honeymap.eventCountSummary(_this.hits.marker[code]));
         }
       });
       this.mapObj = this.mapElem.vectorMap('get', 'mapObject');
@@ -62,28 +67,10 @@ See website for license and contact information.
       return this.mapElem.height(0.8 * jQuery(document).height());
     };
 
-    Honeymap.eventCountSummary = function(hits) {
-      var count, summary, total, type;
-      summary = "";
-      total = 0;
-      for (type in hits) {
-        count = hits[type];
-        if (total === 0) {
-          summary += "<hr/>";
-        }
-        summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>";
-        total += count;
-      }
-      if (total > 0) {
-        summary += "<hr/><b>total</b>: " + total + " events";
-      }
-      return summary;
-    };
-
-    Honeymap.prototype.updateRegioncolors = function() {
+    Honeymap.prototype.updateRegionColors = function() {
       this.mapObj.series.regions[0].params.min = null;
       this.mapObj.series.regions[0].params.max = null;
-      return this.mapObj.series.regions[0].setValues(regionhits_countonly);
+      return this.mapObj.series.regions[0].setValues(this.hits.regionCount);
     };
 
     Honeymap.prototype.removeOldestMarker = function() {
@@ -109,37 +96,52 @@ See website for license and contact information.
       }
     };
 
-    Honeymap.prototype.incMarkerCount = function(type, eventName, marker) {
-      var rc, _base, _base1, _base2, _base3, _name;
-      if (type === 'src' && (rc = marker.regionCode)) {
+    Honeymap.prototype.incMarkerCount = function(marker) {
+      var rc, _base, _base1, _base2, _base3, _name, _name1, _name2;
+      if (marker.type === 'src' && (rc = marker.regionCode)) {
         (_base = this.hits.region)[rc] || (_base[rc] = {});
-        (_base1 = this.hits.region[rc])[eventName] || (_base1[eventName] = 0);
-        this.hits.region[rc][eventname]++;
+        (_base1 = this.hits.region[rc])[_name = marker.eventName] || (_base1[_name] = 0);
+        this.hits.region[rc][marker.eventname]++;
       }
-      (_base2 = this.hits.marker)[_name = marker.id] || (_base2[_name] = {});
-      (_base3 = this.hits.marker[marker.id])[eventName] || (_base3[eventName] = 0);
-      return this.hits.marker[marker.id][eventName]++;
+      (_base2 = this.hits.marker)[_name1 = marker.id] || (_base2[_name1] = {});
+      (_base3 = this.hits.marker[marker.id])[_name2 = marker.eventName] || (_base3[_name2] = 0);
+      return this.hits.marker[marker.id][marker.eventName]++;
     };
 
-    Honeymap.prototype.addMarker = function(lat, lng, type, eventName, regionCode) {
-      var marker;
-      eventName || (eventName = "other");
-      type || (type = 'src');
-      marker = new Marker(this, lat, lang, type, regionCode);
+    Honeymap.prototype.addMarker = function(marker) {
       marker.animate();
-      this.incMarkerCount(type, eventName, marker);
+      this.updateRegionColors();
+      this.incMarkerCount(marker);
       if (!this.mapObj.markers[marker.id]) {
         return;
       }
-      markers_total++;
-      if (markers_total >= markers_visible_max) {
-        remove_oldest_marker();
+      this.markers.count++;
+      if (this.markers.count >= config.markersMaxVisible) {
+        this.removeOldestMarker();
       }
-      return this.mapObj.addMarker(marker.id, {
-        latLng: marker.gps,
+      return this.mapObj.addMarker(marker.id(), {
+        latLng: marker.gps(),
         name: marker.name,
-        style: this.config.colors[type]
+        style: this.config.colors[marker.type]
       }, []);
+    };
+
+    Honeymap.eventCountSummary = function(hits) {
+      var count, summary, total, type;
+      summary = "";
+      total = 0;
+      for (type in hits) {
+        count = hits[type];
+        if (total === 0) {
+          summary += "<hr/>";
+        }
+        summary += "<b>" + type + "</b>: " + (count || 0) + "<br/>";
+        total += count;
+      }
+      if (total > 0) {
+        summary += "<hr/><b>total</b>: " + total + " events";
+      }
+      return summary;
     };
 
     return Honeymap;
@@ -148,12 +150,13 @@ See website for license and contact information.
 
   Marker = (function() {
 
-    function Marker(map, lat, lng, type, regionCode, cityName) {
+    function Marker(map, lat, lng, type, eventName, regionCode, cityName) {
       var point;
       this.map = map;
       this.lat = lat;
       this.lng = lng;
-      this.type = type;
+      this.type = type || "src";
+      this.eventName = eventName || "other";
       point = this.map.mapObj.latLngToPoint(this.lat, this.lng);
       this.x = point.x;
       this.y = point.y;
@@ -187,13 +190,9 @@ See website for license and contact information.
       return [this.lat, this.lng];
     };
 
-    Marker.prototype.regionCode = function() {
-      return this.rc || (this.rc = this.map.regionCode(this.x, this.y));
-    };
-
     Marker.prototype.regionName = function() {
-      if (this.regionCode()) {
-        return this.map.mapObj.getRegionName(this.regionCode());
+      if (this.regionCode) {
+        return this.map.mapObj.getRegionName(this.regionCode);
       }
     };
 
@@ -243,7 +242,7 @@ See website for license and contact information.
   })();
 
   config = {
-    markers_visible: 150,
+    markersMaxVisible: 150,
     colors: {
       src: {
         stroke: 'darkred',
@@ -268,7 +267,39 @@ See website for license and contact information.
     log.add("<b>Welcome to HoneyMap. This is a BETA version! Bug reports welcome :-)</b>");
     log.add("Note that this is not <b>all</b> honeypots of the Honeynet Project,");
     log.add("only those who voluntarily publish their captures to hpfeeds!");
-    return log.add("<br/>");
+    log.add("<br/>");
+    return new Feed(honeymap, log, 500);
   });
+
+  Feed = (function() {
+
+    function Feed(map, log, pause) {
+      this.randomPoint = __bind(this.randomPoint, this);
+
+      var _this = this;
+      this.map = map;
+      this.log = log;
+      window.setInterval((function() {
+        return window.setTimeout(_this.randomPoint, Math.random() * pause);
+      }), 2 * pause);
+    }
+
+    Feed.prototype.randomPoint = function() {
+      var lat, lng, marker;
+      while (true) {
+        lat = Math.random() * 180 - 90;
+        lng = Math.random() * 360 - 180;
+        marker = new Marker(this.map, lat, lng);
+        if (marker.regionCode) {
+          break;
+        }
+      }
+      this.map.addMarker(marker);
+      return this.log.add("New event in " + marker.regionName() + " (" + lat.toFixed(2) + ", " + lng.toFixed(2) + ")");
+    };
+
+    return Feed;
+
+  })();
 
 }).call(this);

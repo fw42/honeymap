@@ -1,5 +1,5 @@
 config =
-  markers_visible: 150
+  markersMaxVisible: 150
   colors:
     src: { stroke: 'darkred', fill: 'red' }
     dst: { stroke: '#383F47', fill: '#F8E23B' }
@@ -17,3 +17,5 @@ jQuery(document).ready ->
   log.add "Note that this is not <b>all</b> honeypots of the Honeynet Project,"
   log.add "only those who voluntarily publish their captures to hpfeeds!"
   log.add "<br/>"
+
+  new Feed(honeymap, log, 500)
