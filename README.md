@@ -42,11 +42,13 @@ Forks
 
 Setup
 -----
+* Install CoffeeScript
 * Install node.js (tested with [0.10.7](http://nodejs.org/dist/v0.10.7/node-v0.10.7.tar.gz))
-* Go to ```server/```
-* ```npm install node-static@0.6.9```
-* ```npm install socket.io@0.9.14```
-* ```npm install validator@1.1.1```
-* Copy ```server_hpfeeds_config.js.example``` to ```server_hpfeeds_config.js``` and fill in
+* In ```server/```
+  * ```npm install node-static@0.6.9```
+  * ```npm install socket.io@0.9.14```
+  * ```npm install validator@1.1.1```
+* In ```server/coffee/```, copy ```config.coffee_example``` to ```config.coffee``` and fill in
   your [hpfriends](http://hpfriends.honeycloud.net) credentials.
-* ```node server_hpfeeds```
+* ```make```
+* ```server/honeymap.sh```
