@@ -32,7 +32,7 @@
     "socket.io"			:  "0.9.14",
     "validator"			:  "1.1.1"
   },
-  "license": "MIT",
+  "license": "LGPL",
   "engines": {
     "node": ">=0.10"
   }
