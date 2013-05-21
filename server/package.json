@@ -1,0 +1,39 @@
+{
+  "name": "HoneyMap",
+  "preferGlobal": true,
+  "version": "0.0.1",
+  "author": "Mark Schloesser <ms@mwcollect.org>",
+  "description": "a real-time world map which visualizes attacks captured by honeypots of the Honeynet Project",
+  "contributors": [ 
+    {
+      "name": "Marak Schloesser",
+      "email": "ms@mwcollect.org"
+    }, 
+    {
+      "name": "Florian Weingarten",
+      "email": "flo@hackvalue.de"
+    },
+    {
+      "name": "Johannes Gilger",
+      "email": "jojo@hackvalue.de"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fw42/honeymap.git"
+  },
+  "keywords": [
+    "http",
+    "server"
+  ],
+  "dependencies" : {
+    "coffee-script"	:  "*",
+    "node-static"		:  "0.6.9",
+    "socket.io"			:  "0.9.14",
+    "validator"			:  "1.1.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  }
+}
