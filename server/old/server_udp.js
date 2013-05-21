@@ -70,7 +70,7 @@ udpserver.on("message", function (msg, rinfo) {
   //   ll: [37.7484, -122.4156] }
   console.log(" -> lookup data:", data);
   if(data != null) {
-    io.sockets.emit('marker', {
+    io.sockets.emit('geoloc.events', {
       latitude: data.ll[0], longitude: data.ll[1],
       countrycode: data.country, country: data.country, city: data.city,
 
