@@ -7,7 +7,8 @@ class Feed
   handler: (data) =>
     lat = data.lat
     lng = data.lng
-    marker = new Marker(@map, lat, lng, "random_remote")
+    eventName = data.type
+    marker = new Marker(@map, lat, lng, eventName)
     return unless marker.regionCode
     @map.addMarker(marker)
     @log.add "New event in " + marker.regionName() + " " + marker.name()

@@ -11,6 +11,6 @@ class HoneymapServer
     randomPoint = ->
       lat = Math.random() * 180 - 90
       lng = Math.random() * 360 - 180
-      transport.broadcast("geoloc.events", { lat: lat, lng: lng })
+      transport.broadcast("geoloc.events", { lat: lat, lng: lng, type: "random_remote" })
 
     setInterval((-> setTimeout(randomPoint, Math.random() * 1000) ), 500)
