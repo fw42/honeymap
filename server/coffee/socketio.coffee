@@ -9,11 +9,9 @@ class Transport
     @socketio.set('log level', 1)                    # reduce logging
 
     # Clean up on disconnect
-    @socketio.sockets.on('connection', (socket) ->
-      socket.on('disconnect', ->
+    @socketio.sockets.on 'connection', (socket) ->
+      socket.on 'disconnect', ->
         delete socket.namespace.sockets[socket.id]
-      )
-    )
 
   broadcast: (instance, data) ->
     @socketio.sockets.emit(instance, data)

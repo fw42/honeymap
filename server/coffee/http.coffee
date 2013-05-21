@@ -11,14 +11,13 @@ class HttpServer
 
   handler: (req, res) =>
     try
-      @static.serve(req, res, (err, _) ->
+      @static.serve req, res, (err, _) ->
         unless err
           HttpServer.log(req)
           return
         HttpServer.log(req, err.status)
         res.writeHead(err.status, err.headers)
         res.end()
-      )
     catch err
       console.error(err)
       res.writeHead(500)

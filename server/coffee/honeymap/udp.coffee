@@ -9,10 +9,9 @@ class HoneymapServer
     udpserver = dgram.createSocket("udp4")
     udpserver.bind(41234)
 
-    udpserver.on("listening", ->
+    udpserver.on "listening", ->
       address = udpserver.address()
       console.log("udpserver listening " + address.address + ":" + address.port)
-    )
 
     udpserver.on "message", (msg, rinfo) ->
       console.log("server got: " + msg.toString() + " (" + typeof(msg) + ") from " +
