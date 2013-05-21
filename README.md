@@ -2,16 +2,19 @@ HoneyMap
 ========
 
 HoneyMap is a web application which visualizes a live stream of
-GPS locations on a SVG world map.
-In principle, it can be used with any stream of GPS data. For our application,
-we use honeypot captures, provided by several [hpfeeds](https://github.com/rep/hpfeeds)
-from the [Honeynet Project](http://www.honeynet.org/).
+GPS locations on a SVG world map. In principle, it can be used
+with any stream of GPS data. For our application, we use honeypot
+captures, provided by several [hpfeeds](https://github.com/rep/hpfeeds)
+from the [Honeynet Project](http://www.honeynet.org/). For more information
+on our instance of HoneyMap, see
+[HoneyMap - Visualizing Worldwide Attacks in Real-Time](http://www.honeynet.org/node/960).
 
-It makes use of [jQuery](http://jquery.com/), [node.js](http://nodejs.org/),
-[socket.io](http://socket.io/) (HTML5 websockets), [jVectorMap](http://jvectormap.com/) and
-[jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
+It is written in [CoffeeScript](http://coffeescript.org/) and makes use of
+[jQuery](http://jquery.com/), [node.js](http://nodejs.org/),
+[socket.io](http://socket.io/) (HTML5 websockets), [jVectorMap](http://jvectormap.com/)
+and [jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
 
-Tested with node.js v0.8.9 and socket.io v0.9.10.
+Tested with node.js v0.10.7 and socket.io v0.9.14.
 
 Example
 -------
@@ -36,3 +39,13 @@ Authors
 Forks
 -----
 * [German Telecom (DTAG) Sicherheitstacho](http://www.sicherheitstacho.eu/)
+
+Setup
+-----
+* Install node.js (tested with [0.10.7](http://nodejs.org/dist/v0.10.7/node-v0.10.7.tar.gz))
+* In ```server/```
+  * ```npm install```
+* In ```server/coffee/```, copy ```config.coffee_example``` to ```config.coffee``` and fill in
+  your [hpfriends](http://hpfriends.honeycloud.net) credentials.
+* ```make```
+* ```server/honeymap.sh```

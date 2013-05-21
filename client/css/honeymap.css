@@ -52,7 +52,7 @@ a {
   position: absolute;
   left: 1%;
   bottom: 1%;
-  max-width: 20%;
+  max-width: 15%;
 }
 
 #logo1 img, #logo2 img {
@@ -63,7 +63,7 @@ a {
   position: absolute;
   right: 1%;
   bottom: 1%;
-  max-width: 20%;
+  max-width: 15%;
 }
 
 #helpbtn {
