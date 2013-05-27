@@ -1,16 +1,26 @@
-YUICOMPRESSOR ?= /path/to/YUICOMPRESSOR
+all:	hpfeeds
 
-all:	hm.js
+hpfeeds: hpfeeds_client hpfeeds_server
 
-hm.js: all.js
-	java -jar $(YUICOMPRESSOR) -o static/hm.js all.js
-	rm all.js
+random: basic_client random_server
 
-all.js:
-	cat static/extern/jquery-*.js static/main.js static/layout.js static/extern/bootstrap.js static/feed_socketio_hpfeeds.js static/map.js > all.js
+udp: basic_client udp_server
+
+hpfeeds_client: client/coffee/* client/coffee/feeds/hpfeeds.coffee
+	coffee -cj client/js/honeymap.js client/coffee/*.coffee client/coffee/feeds/hpfeeds.coffee
+
+hpfeeds_server: server/coffee/* server/coffee/honeymap/hpfeeds.coffee
+	coffee -cj server/js/honeymap.js server/coffee/config.coffee server/coffee/http.coffee server/coffee/socketio.coffee server/coffee/honeymap/hpfeeds.coffee server/coffee/main.coffee
+
+basic_client: client/coffee/* client/coffee/feeds/basic.coffee
+	coffee -cj client/js/honeymap.js client/coffee/*.coffee client/coffee/feeds/basic.coffee
+
+random_server: server/coffee/* server/coffee/honeymap/random.coffee
+	coffee -cj server/js/honeymap.js server/coffee/config.coffee server/coffee/http.coffee server/coffee/socketio.coffee server/coffee/honeymap/random.coffee server/coffee/main.coffee
+
+udp_server: server/coffee/* server/coffee/honeymap/udp.coffee
+	coffee -cj server/js/honeymap.js server/coffee/config.coffee server/coffee/http.coffee server/coffee/socketio.coffee server/coffee/honeymap/udp.coffee server/coffee/main.coffee
 
 clean:
-	rm -f static/hm.js
-
-.PHONY: all clean
-
+	rm client/js/honeymap.js
+	rm server/js/honeymap.js
