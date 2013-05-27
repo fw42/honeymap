@@ -43,8 +43,7 @@ Forks
 Setup
 -----
 * Install node.js (tested with [0.10.7](http://nodejs.org/dist/v0.10.7/node-v0.10.7.tar.gz))
-* In ```server/```
-  * ```npm install```
+* In ```server/```, run ```npm install```
 * In ```server/coffee/```, copy ```config.coffee_example``` to ```config.coffee``` and fill in
   your [hpfriends](http://hpfriends.honeycloud.net) credentials.
 * ```make```
