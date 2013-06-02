@@ -44,7 +44,3 @@ Authors
 Forks
 -----
 * [German Telecom (DTAG) Sicherheitstacho](http://www.sicherheitstacho.eu/)
-
-Setup
------
-* ...
