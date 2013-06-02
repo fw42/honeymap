@@ -9,9 +9,11 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"runtime"
+	"path"
 )
 
-const staticDirRel = "../client"
+const staticDir = "../client"
 const bind = "0.0.0.0:3000"
 
 type Config struct {
@@ -21,10 +23,13 @@ type Config struct {
 	Auth  string
 }
 
+func dirname() string {
+	_, myself, _, _ := runtime.Caller(1)
+	return path.Dir(myself)
+}
+
 func readConfig() Config {
-	wd, err := os.Getwd()
-	checkFatalError(err)
-	blob, err := ioutil.ReadFile(wd + "/" + "config.json")
+	blob, err := ioutil.ReadFile(dirname() + "/" + "config.json")
 	checkFatalError(err)
 
 	var conf Config
@@ -32,12 +37,6 @@ func readConfig() Config {
 	checkFatalError(err)
 
 	return conf
-}
-
-func staticDirAbs() string {
-	dir, err := os.Getwd()
-	checkFatalError(err)
-	return dir + "/" + staticDirRel + "/"
 }
 
 func checkFatalError(err error) {
@@ -90,7 +89,7 @@ func hpfeedsConnect(config Config, geolocEvents chan hpfeeds.Message) {
 func main() {
 	config := readConfig()
 
-	http.Handle("/", http.FileServer(http.Dir(staticDirAbs())))
+	http.Handle("/", http.FileServer(http.Dir(dirname() + "/" + staticDir + "/")))
 	sockjsMux := sockjs.NewServeMux(http.DefaultServeMux)
 	sockjsConf := sockjs.NewConfig()
 	sockjsMux.Handle("/data", dataHandler, sockjsConf)
