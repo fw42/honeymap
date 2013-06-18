@@ -2,7 +2,7 @@ class Feed
   constructor: (map, log, instance) ->
     @map = map
     @log = log
-    transport = new Transport(instance, @handler)
+    transport = new Transport(instance, @handler, log)
 
   handler: (data) =>
     lat1 = data.latitude

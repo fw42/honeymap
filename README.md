@@ -9,12 +9,17 @@ from the [Honeynet Project](http://www.honeynet.org/). For more information
 on our instance of HoneyMap, see
 [HoneyMap - Visualizing Worldwide Attacks in Real-Time](http://www.honeynet.org/node/960).
 
-It is written in [CoffeeScript](http://coffeescript.org/) and makes use of
-[jQuery](http://jquery.com/), [node.js](http://nodejs.org/),
-[socket.io](http://socket.io/) (HTML5 websockets), [jVectorMap](http://jvectormap.com/)
-and [jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
+Front-end code is written in [CoffeeScript](http://coffeescript.org/) and makes use of
+[SockJS](http://sockjs.org/) (HTML5 websockets), [jQuery](http://jquery.com/),
+[jVectorMap](http://jvectormap.com/) and
+[jQuery Transit](http://ricostacruz.com/jquery.transit/) (CSS3 animations).
 
-Tested with node.js v0.10.7 and socket.io v0.9.14.
+Back-end code is written in [Go](http://golang.org/) and makes use of
+[sockjs-go](https://github.com/fzzy/sockjs-go/) and
+[go-hpfeeds](https://github.com/fw42/go-hpfeeds/).
+
+(The earliest version of HoneyMap was using [node.js](http://nodejs.org/)
+instead of Go and [socket.io](http://socket.io/) instead of SockJS.)
 
 Example
 -------
@@ -39,12 +44,3 @@ Authors
 Forks
 -----
 * [German Telecom (DTAG) Sicherheitstacho](http://www.sicherheitstacho.eu/)
-
-Setup
------
-* Install node.js (tested with [0.10.7](http://nodejs.org/dist/v0.10.7/node-v0.10.7.tar.gz))
-* In ```server/```, run ```npm install```
-* In ```server/coffee/```, copy ```config.coffee_example``` to ```config.coffee``` and fill in
-  your [hpfriends](http://hpfriends.honeycloud.net) credentials.
-* ```make```
-* ```server/honeymap.sh```

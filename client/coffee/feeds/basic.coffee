@@ -2,11 +2,11 @@ class Feed
   constructor: (map, log, instance) ->
     @map = map
     @log = log
-    transport = new Transport(instance, @handler)
+    transport = new Transport(instance, @handler, log)
 
   handler: (data) =>
-    lat = data.lat
-    lng = data.lng
+    lat = data.latitude
+    lng = data.longitude
     eventName = data.type
     marker = new Marker(@map, lat, lng, eventName)
     return unless marker.regionCode

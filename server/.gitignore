@@ -1,3 +1,2 @@
-node_modules
-js
-npm-debug.log
+config.json
+server

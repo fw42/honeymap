@@ -8,12 +8,12 @@
   <link rel="stylesheet" href="extern/bootstrap.min.css" type="text/css" media="screen"/>
   <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
   <meta content="Florian Weingarten, Mark Schloesser, Johannes Gilger" name="author" />
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
   <script src="extern/jquery-1.7.2.min.js"></script>
   <script src="extern/jquery-jvectormap-1.0.min.js"></script>
   <script src="extern/jquery-jvectormap-world-mill-en.js"></script>
   <script src="extern/bootstrap.js"></script>
   <script src="extern/jquery-transit.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
@@ -43,15 +43,16 @@
       <ul>
         <li>
           <b>Frontend:</b>
+          <a href="http://coffeescript.org/">CoffeeScript</a>,
           <a href="http://jquery.com/">jQuery</a>,
           <a href="http://jvectormap.com/">jVectorMap</a>,
-          <a href="http://ricostacruz.com/jquery.transit/">jQuery-Transit</a>,
+          <a href="http://ricostacruz.com/jquery.transit/">Transit</a>,
           <a href="http://twitter.github.com/bootstrap/">bootstrap</a>
         </li>
         <li>
           <b>Backend:</b>
-          <a href="http://nodejs.org/">node.js</a>,
-          <a href="http://socket.io/">socket.io</a>,
+          <a href="http://golang.org/">Go</a>,
+          <a href="http://sockjs.org/">SockJS</a>,
           <a href="https://github.com/rep/hpfeeds">hpfeeds</a>
         </li>
       </ul>
@@ -114,7 +115,7 @@
       (LGPL license).
       <h4>Why did you create this map?</h4>
       Just for fun. We like visualizations and we wanted to play
-      around with node.js/socket.io. The first version of this map was
+      around with websockets. The first version of this map was
       hacked together in essentially 2-3 days.
     </div>
     <div class="modal-footer">
