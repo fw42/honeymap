@@ -33,7 +33,11 @@ class Honeymap
         label.append(Honeymap.eventCountSummary(@hits.region[code]))
       onMarkerLabelShow: (ev, label, code) =>
         label.html(@captions[code])
-        label.append(Honeymap.eventCountSummary(@hits.marker[code]))
+        if @hits.marker[code]["dst"]?
+            label.append(Honeymap.eventCountSummary(@hits.marker[code]["dst"], "dst"))
+            label.append(Honeymap.eventCountSummary(@hits.marker[code]["src"], "src"))
+        else
+            label.append(Honeymap.eventCountSummary(@hits.marker[code]["src"]))
     )
     @mapObj = @mapElem.vectorMap('get', 'mapObject')
     @mapObj.regions['US'].config.name = "USA"
@@ -78,8 +82,9 @@ class Honeymap
 
   incMarkerCount: (marker) ->
     @hits.marker[marker.id()] ||= {}
-    @hits.marker[marker.id()][marker.eventName] ||= 0
-    @hits.marker[marker.id()][marker.eventName]++
+    @hits.marker[marker.id()][marker.type] ||= {}
+    @hits.marker[marker.id()][marker.type][marker.eventName] ||= 0
+    @hits.marker[marker.id()][marker.type][marker.eventName]++
     # only count src markers which are within a valid region
     return unless marker.type == 'src' and rc = marker.regionCode
     @hits.region[rc] ||= {}
@@ -99,10 +104,14 @@ class Honeymap
     if @hits.marker["total"] > config.markersMaxVisible then @removeOldestMarker()
     @mapObj.addMarker(marker.id(), { latLng: marker.gps(), name: marker.name(), style: @config.colors[marker.type] }, [])
 
-  @eventCountSummary: (hits) ->
+  @eventCountSummary: (hits, origin) ->
     return unless hits?
     total = 0
     summary = "<hr/>"
+    if origin == "dst"
+        summary += "<b>Destination:</b><br/>"
+    else if origin == "src"
+        summary += "<b>Source:</b><br/>"
     for type, count of hits
       count ||= 0
       summary += "<b>#{type}</b>: #{count}<br/>"
