@@ -2,6 +2,7 @@ class Transport
   constructor: (instance, handler, log) ->
     @log = log
     @handler = handler
+    @reconnectDelay = 1
     @connect()
 
   connect: ->
