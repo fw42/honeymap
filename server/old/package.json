@@ -29,7 +29,7 @@
   "dependencies" : {
     "coffee-script"	:  "*",
     "node-static"		:  "0.6.9",
-    "socket.io"			:  "0.9.14",
+    "sockjs"		                :  "*",
     "validator"			:  "1.1.1"
   },
   "license": "LGPL",

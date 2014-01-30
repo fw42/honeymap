@@ -18,8 +18,8 @@ Back-end code is written in [Go](http://golang.org/) and makes use of
 [sockjs-go](https://github.com/fzzy/sockjs-go/) and
 [go-hpfeeds](https://github.com/fw42/go-hpfeeds/).
 
-(The earliest version of HoneyMap was using [node.js](http://nodejs.org/)
-instead of Go and [socket.io](http://socket.io/) instead of SockJS.)
+An alternative back-end is available using [node.js](http://nodejs.org/)
+instead of Go. Have a look in the `server/old` source directory.
 
 Example
 -------

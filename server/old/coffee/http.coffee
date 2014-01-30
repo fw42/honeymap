@@ -4,7 +4,7 @@ class HttpServer
     @port = port || 80
     @url = require('url')
     ns = require('node-static')
-    @static = new(ns.Server)("../client", { cache: cache || 600 })
+    @static = new(ns.Server)("../../client", { cache: cache || 600 })
 
   listen: ->
     @http.listen(@port)
