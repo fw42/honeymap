@@ -33,8 +33,17 @@
     "validator"			:  "1.1.1",
     "just-log"			:  "0.0.2"
   },
+  "scripts": {
+    "prestart": "grunt",
+    "start": "node js/honeymap.js"
+  },
   "license": "LGPL",
   "engines": {
     "node": ">=0.10"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-contrib-coffee": "0.9.0",
+    "grunt-contrib-watch": "0.5.3"
   }
 }
