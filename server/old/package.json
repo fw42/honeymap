@@ -30,7 +30,8 @@
     "coffee-script"	:  "*",
     "node-static"		:  "0.6.9",
     "sockjs"		                :  "*",
-    "validator"			:  "1.1.1"
+    "validator"			:  "1.1.1",
+    "just-log"			:  "0.0.2"
   },
   "license": "LGPL",
   "engines": {
