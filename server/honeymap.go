@@ -21,6 +21,7 @@ type Config struct {
 	Port  int
 	Ident string
 	Auth  string
+	Channel string
 }
 
 func dirname() string {
@@ -59,9 +60,53 @@ func dataHandler(s sockjs.Session) {
 	}
 }
 
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
+var allowed = []string{
+	"city", 
+	"city2", 
+	"countrycode", 
+	"countrycode2", 
+	"latitude", 
+	"latitude2", 
+	"longitude", 
+	"longitude2", 
+	"md5", 
+	"type",
+}
+
 func broadcast(input chan hpfeeds.Message) {
 	for msg := range input {
-		sockjsClients.Broadcast(msg.Payload)
+
+		var f interface{}
+		err := json.Unmarshal(msg.Payload, &f)
+		if err != nil {
+			log.Println(err, " on ", string(msg.Payload))
+			return
+		}
+	
+		m := f.(map[string]interface{})
+		for k, _ := range m {
+			if ! stringInSlice(k, allowed) {
+				delete(m, k)
+			}
+		}
+		
+		if len(m) > 0 {
+			payload, err := json.Marshal(m)
+			if err == nil {
+				sockjsClients.Broadcast(payload)
+			}
+		}else{
+			log.Println("Skipping empty map")
+		}
 	}
 }
 
@@ -74,7 +119,7 @@ func hpfeedsConnect(config Config, geolocEvents chan hpfeeds.Message) {
 		err := hp.Connect()
 		if err == nil {
 			log.Printf("Connected to Hpfeeds server.")
-			hp.Subscribe("geoloc.events", geolocEvents)
+			hp.Subscribe(config.Channel, geolocEvents)
 			<-hp.Disconnected
 			log.Printf("Lost connection to %s:%d :-(\n", config.Host, config.Port)
 		}

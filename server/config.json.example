@@ -2,5 +2,6 @@
    "host": "hpfeeds.honeycloud.net",
    "port": 20000,
   "ident": "MyUsername",
-   "auth": "MyPassword"
+   "auth": "MyPassword",
+   "channel": "geoloc.events"
 }
