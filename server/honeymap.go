@@ -2,15 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/ChrisFernandez/sockjs-go/sockjs"
 	"github.com/fw42/go-hpfeeds"
-	"github.com/fzzy/sockjs-go/sockjs"
+	//"github.com/fzzy/sockjs-go/sockjs"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"time"
-	"runtime"
 	"path"
+	"runtime"
+	"time"
 )
 
 const staticDir = "../client"
@@ -89,7 +90,7 @@ func hpfeedsConnect(config Config, geolocEvents chan hpfeeds.Message) {
 func main() {
 	config := readConfig()
 
-	http.Handle("/", http.FileServer(http.Dir(dirname() + "/" + staticDir + "/")))
+	http.Handle("/", http.FileServer(http.Dir(dirname()+"/"+staticDir+"/")))
 	sockjsMux := sockjs.NewServeMux(http.DefaultServeMux)
 	sockjsConf := sockjs.NewConfig()
 	sockjsMux.Handle("/data", dataHandler, sockjsConf)
