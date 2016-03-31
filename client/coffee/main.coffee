@@ -1,8 +1,8 @@
 config =
   markersMaxVisible: 150
   colors:
-    src: { stroke: 'darkred', fill: 'red' }
-    dst: { stroke: '#383F47', fill: '#F8E23B' }
+    src: { stroke: 'darkred', fill: 'red', 'data-ignore': 'true' }
+    dst: { stroke: '#383F47', fill: '#F8E23B', 'data-ignore': 'true' }
     scale: [ '#FFFFFF', '#0071A4' ]
 
 jQuery(document).ready ->
