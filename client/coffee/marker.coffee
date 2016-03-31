@@ -12,6 +12,8 @@ class Marker
     @cityName = cityName
 
   animate: ->
+    if @type == 'dst'
+      return
     cssClass = if @type == 'dst' then 'markerdst' else 'markersrc'
     @map.mapElem.append(
       jQuery('<div class="marker_animation ' + cssClass + '"></div>')

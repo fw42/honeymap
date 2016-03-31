@@ -18,7 +18,8 @@ class Feed
     @addLog(src, dst, data.md5)
     @map.addMarker(src)
     @map.addMarker(dst) if dst
-
+    if dst != null then @map.drawShoot(src, dst) 
+	
   addLog: (src, dst, md5) ->
     return unless src.regionName()
     timestamp = new Date().toTimeString().substring(0,8)
