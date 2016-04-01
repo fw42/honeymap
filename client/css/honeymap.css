@@ -17,12 +17,12 @@ a {
 
 #log {
   margin: 1% auto 0px auto;
-  overflow: auto;
+  overflow: hidden;
   overflow-x: hidden;
   white-space: nowrap;
-  background-color: black;
+  background:transparent;
   color: white;
-  border: 1px solid white;
+  border: 0px;
   padding: 5px;
   font-family: 'Ubuntu Mono', monospace, fixed, sans-serif;
   font-size: 70%;
