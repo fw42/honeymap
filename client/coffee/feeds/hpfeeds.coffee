@@ -22,6 +22,8 @@ class Feed
 	
   addLog: (src, dst, md5) ->
     return unless src.regionName()
+    console.log src
+    console.log dst
     timestamp = new Date().toTimeString().substring(0,8)
     attacktype = if src.eventName == "thug.events" then "scan" else "attack"
     logstr  = """
