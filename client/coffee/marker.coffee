@@ -12,13 +12,12 @@ class Marker
     @cityName = cityName
 
   animate: ->
-    if @type == 'dst'
-      return
     cssClass = if @type == 'dst' then 'markerdst' else 'markersrc'
     @map.mapElem.append(
       jQuery('<div class="marker_animation ' + cssClass + '"></div>')
       .css('left', @x + 'px')
       .css('top', @y + 'px')
+      .css('z-index', 10)
       .css({ opacity: 1, scale: 0 })
       .transition({ opacity: 0, scale: 1 }, 1000, 'linear', ->
         jQuery(this).remove()
