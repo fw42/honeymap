@@ -94,7 +94,7 @@ class Honeymap
     @hits.region["total"][rc]++
 
   addMarker: (marker) ->
-    marker.animate()
+    #marker.animate()
     @captions[marker.id()] = marker.caption()
     @incMarkerCount(marker)
     @updateRegionColors()
@@ -107,11 +107,14 @@ class Honeymap
   drawShoot: (src, dst) ->
     @shootNum++
     shootNum = @shootNum
+    #fitsize = @fitSize
     mycallback = ()-> 
+      dst.animate()
       $('#shoot-path'+shootNum).remove()
+      #fitsize()      
       
     $('#svg-map').html($('#svg-map').html()+@path_form(src, dst))
-    new Vivus('svg-map', {duration: 120}, mycallback)
+    new Vivus('svg-map', {duration: 110}, mycallback)
             
   path_form: (fp, sp) ->
     mp = {'x': (fp.x + sp.x)/2, 'y':(fp.y+sp.y)/2 + 30}
