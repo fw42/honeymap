@@ -13,6 +13,7 @@ class Honeymap
     @captions = {}
     @mapElem = jQuery('#world-map')
     @fitSize()
+    @shootNum = 0
     @mapElem.vectorMap(
       backgroundColor: ''
       markerStyle:
@@ -35,6 +36,8 @@ class Honeymap
         label.html(@captions[code])
         label.append(Honeymap.eventCountSummary(@hits.marker[code]))
     )
+
+    $('#world-map svg').attr('id', 'svg-map')
     @mapObj = @mapElem.vectorMap('get', 'mapObject')
     @mapObj.regions['US'].config.name = "USA"
 
@@ -51,7 +54,8 @@ class Honeymap
 
   removeOldestMarker: ->
     # only remove src markers
-    toremove = jQuery(@mapElem.find("svg g circle.jvectormap-marker[fill=" + @config.colors.src.fill + "]")[0])
+    #toremove = jQuery(@mapElem.find("svg g circle.jvectormap-marker[fill=" + @config.colors.src.fill + "]")[0])
+    toremove = jQuery(@mapElem.find("svg g path.jvectormap-marker[fill=" + @config.colors.src.fill + "]")[0])
     par = toremove.parent()
     id = toremove.attr('data-index')
     delete(@captions[id])
@@ -63,7 +67,8 @@ class Honeymap
     efp = jQuery(document.elementFromPoint(x + @mapElem.offset().left, y + @mapElem.offset().top))
     if efp.is('path')
       return efp.attr('data-code')
-    else if efp.is('circle') || (efp.is('div') && efp.hasClass('marker_animation'))
+    #else if efp.is('circle') || (efp.is('div') && efp.hasClass('marker_animation'))
+    else if efp.is('path') || (efp.is('div') && efp.hasClass('marker_animation'))
       # This is pretty ugly. If we hit an existing marker, make it invisible,
       # recursively look again and then make it visible again.
       efp.hide()
@@ -89,7 +94,7 @@ class Honeymap
     @hits.region["total"][rc]++
 
   addMarker: (marker) ->
-    marker.animate()
+    #marker.animate()
     @captions[marker.id()] = marker.caption()
     @incMarkerCount(marker)
     @updateRegionColors()
@@ -98,6 +103,23 @@ class Honeymap
     @hits.marker["total"]++
     if @hits.marker["total"] > config.markersMaxVisible then @removeOldestMarker()
     @mapObj.addMarker(marker.id(), { latLng: marker.gps(), name: marker.name(), style: @config.colors[marker.type] }, [])
+    
+  drawShoot: (src, dst) ->
+    @shootNum++
+    shootNum = @shootNum
+    #fitsize = @fitSize
+    mycallback = ()-> 
+      dst.animate()
+      $('#shoot-path'+shootNum).remove()
+      #fitsize()      
+      
+    $('#svg-map').html($('#svg-map').html()+@path_form(src, dst))
+    new Vivus('svg-map', {duration: 110}, mycallback)
+            
+  path_form: (fp, sp) ->
+    mp = {'x': (fp.x + sp.x)/2, 'y':(fp.y+sp.y)/2 + 30}
+    svg = '<g id="shoot-path' + @shootNum + '"><path d="M' + fp.x + ' ' + fp.y + ' Q ' + mp.x + ' ' + mp.y + ', ' + sp.x + ' ' + sp.y + '" stroke="red" fill="transparent"/></g>'
+    return svg;
 
   @eventCountSummary: (hits) ->
     return unless hits?
