@@ -15,7 +15,7 @@ import (
 )
 
 const staticDir = "../client"
-const bind = "0.0.0.0:3000"
+const bind = "127.0.0.1:3000"
 
 type Config struct {
 	Host  string
