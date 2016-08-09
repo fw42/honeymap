@@ -59,6 +59,11 @@ Installation
   * On Ubuntu: apt-get install coffeescript
   * On Debian: Install node.js, then npm install coffeescript
   * make
-* Run server/server
+  * cp honeymap /etc/init.d/honeymap
+* Install honeymap as a service:
+  * update-rc.d honeymap defaults
+  * service honeymap start
+* Or run it manually:
+  * Run server/server
 * Go to http://your-server:3000/
 * Optionally, use nginx as reverse proxy
